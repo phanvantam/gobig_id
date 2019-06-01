@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\UserRepositoryInterface;
-use Illuminate\Http\Request;
+use App\Http\Requests\UserRequest;
 
 class UserController extends Controller
 {
@@ -12,33 +12,58 @@ class UserController extends Controller
      *
      * @return void
      */
-    protected $user;
-    protected $request;
 
-    public function __construct(
-        UserRepositoryInterface $user,
-        Request $request
-    )
+    public function __construct(UserRepositoryInterface $user)
     {
         $this->user = $user;
-        $this->request = $request;
     }
 
-    public function index()
+    public function findUser(UserRequest $request)
     {
-        $result = $this->user->getByFilter();
-        return $this->response($result);
+        $data = $this->user->search([
+            'use_mail' => $request->input('mail'),
+            'use_password' => md5($request->input('password'))
+        ]);
+        dd($data);
     }
 
-    public function add()
+    public function index(UserRequest $request)
     {
-        $data = [
-            'fullname' => $this->request->json('fullname'),
-            'password' => $this->request->json('password'),
-            'email' => $this->request->json('email'),
-            'phone' => $this->request->json('phone'),
+        $filter = [
+            's' => $request->input('s','')
         ];
-        $this->user->add($data);
+        $data = $this->user->index($filter);
+        return $this->response($data);
+    }   
+
+    public function getUser($id,UserRequest $request)
+    {
+        dd($id);
+    }
+
+    public function createUser(UserRequest $request)
+    {
+        $create =  $this->user->firstOrCreate([
+            'use_mail' => $request->input('mail')
+        ],[ 
+            'use_type' => $request->input('type',0),
+            'use_name' => $request->input('name'),
+            'use_password' => md5($request->input('password')),
+            'use_token' => md5($request->input('password'))
+        ]);
+        return $this->response();
+    }
+
+    public function updateUser($id,UserRequest $request)
+    {
+        if(!$this->user->find($id)) return $this->response(['message' => 'Người dùng không tồn tại !' ],204);
+        $update =  $this->user->update($id,[
+            'use_mail' => $request->input('mail'),
+            'use_type' => $request->input('type',0),
+            'use_name' => $request->input('name'),
+            'use_password' => md5($request->input('password')),
+        ]);
+        if($update == 0) return $this->response(['message' => 'Cập nhật thông tin người dùng thất bại !' ],406);
         return $this->response();
     }
 }

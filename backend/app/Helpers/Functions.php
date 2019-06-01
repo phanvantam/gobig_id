@@ -1,6 +1,8 @@
 <?php    
 namespace App\Helpers;
 
+use League\Fractal;
+
 class Functions {
 
     public static function arrayGet($input, $key, $default = null)
@@ -18,4 +20,15 @@ class Functions {
         return $input;
     }
 
+    public static function transformer($data,$type,$transformer,$include = '')
+    {
+        $value = $type == 1 ? new Fractal\Resource\Item($data,$transformer) : new Fractal\Resource\Collection($data,$transformer);
+        $manager = new Fractal\Manager();
+        $manager->setSerializer(new DataArraySerializer());
+        if($include)
+        {
+            $manager->parseIncludes($include);
+        }
+        return $manager->createData($value)->toArray();
+    }
 }

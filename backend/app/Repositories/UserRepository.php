@@ -2,37 +2,49 @@
 
 namespace App\Repositories;
 
-use App\Repositories\UserRepositoryInterface;
-use App\Repositories\BlockRepositoryInterface;
 use App\Models\User;
+use App\Repositories\UserRepositoryInterface;
+use App\Transformers\UserTransformer;
+use App\Helpers\Functions;
 
 class UserRepository implements UserRepositoryInterface
-{
-
-    public function getByFilter()
+{   
+    public function search($data)
     {
-        $result = User::get();
-        return $result;
+        $user = new User;
+        foreach ($data as $key => $value) {
+            $user = $user->where($key,$value);
+        }
+        return $user->first();
     }
 
-    public function getByUserId($value)
+    public function index($filter)
     {
-        $result = User::where('user_id', $value)->first();
-        return $result;
-    }
-
-    public function add($input)
-    {
-
-        //Sử dụng thêm một salt cố định
-        $staticSalt = '010101#';
-
-        $data = [
-            'user_fullname'=> $input['fullname'],
-            'user_password'=> md5($staticSalt.$input['password']),
-            'user_email'=> $input['email'],
-            'user_phone'=> $input['phone'],
+        $data = User::where('use_name', 'LIKE', "%{$filter['s']}%")
+            ->orderBy('use_updated_at')
+            ->paginate(10);
+        return [
+            'data' => Functions::transformer($data,0,new UserTransformer,'type'),
+            'paginate' => [
+                'current'=> $data->currentPage(),
+                'total'=> $data->lastPage(),
+                'per'=> $data->perPage(),
+            ]
         ];
-        return User::insertGetId($data);
+    }
+
+    public function find($id)
+    {
+        return User::where('use_id',$id)->first();
+    }
+
+    public function update($id,$data)
+    {
+        return User::where('use_id',$id)->update($data);
+    }
+
+    public function firstOrCreate($find,$data = [])
+    {
+        return User::firstOrCreate($find,$data);
     }
 }

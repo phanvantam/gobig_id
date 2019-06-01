@@ -30,27 +30,14 @@
                         </a>
                     </li>
                     <li class="list-bot item">
-                        <router-link :to="{ name: 'scriptIndex'}" class="link">
+                        <router-link :to="{ name: 'userIndex'}" class="link">
                             <i class="icon ion-logo-wordpress"></i>
-                            <span>Kịch bản</span>
+                            <span>Người dùng</span>
                         </router-link>
-                    </li>
-                    <li class="list-bot item">
-                        <router-link :to="{ name: 'fanpageList'}" class="link">
-                            <i class="icon ion-md-albums"></i>
-                            <span>Fanpage</span>
-                        </router-link>
-                    </li>
-                    <li class="list-bot item">
-                        <router-link :to="{ name: 'formData'}" class="link">
-                            <i class="icon ion-md-albums"></i>
-                            <span>Form nhập liệu</span>
-                        </router-link>
-                    </li>
-                    <li class="list-bot item">
-                        <router-link :to="{ name: 'customerList'}" class="link">
-                            <i class="icon ion-md-person"></i>
-                            <span>Khách hàng</span>
+                    </li><li class="list-bot item">
+                        <router-link :to="{ name: 'typeIndex'}" class="link">
+                            <i class="icon ion-logo-wordpress"></i>
+                            <span>Cấp độ</span>
                         </router-link>
                     </li>
                     <li class="support item">
@@ -110,11 +97,11 @@
                 <div class="bot-scene-title-content bot-title-content">
                     <div class="scene-title">
                         <nav>
-                            <h4>GOBIG - CHATBOT FACEBOOK</h4>
+                            <h4>GOBIG - Quản lý người dùng</h4>
                         </nav>
                     </div>
                     <div class="scene-tools">
-                        <div class="flex-display">
+                        <!-- <div class="flex-display">
                             <div class="dashboard_page__img">
                                 <img src="//graph.facebook.com/946385792221717/picture?width=32&amp;height=32"
                                      class="radius-cycle" style="height: 34px;"></div>
@@ -124,7 +111,7 @@
                                     View Đồ Ăn
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>

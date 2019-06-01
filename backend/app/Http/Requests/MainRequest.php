@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Urameshibr\Requests\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
+
 class MainRequest extends FormRequest
 {
     protected $authorize;
@@ -45,20 +46,12 @@ class MainRequest extends FormRequest
     //     ];
     // }
 
-    protected function failedValidation(Validator $validator) { 
-        $messages = [
-            'fields'=> [],
-            'list' => []
-        ];
-        foreach($validator->errors()->messages() as $key => $value) {
-            $messages['fields'][$key] = $value[0];
-        	$messages['list'][] = $value[0];
-        }
+    protected function failedValidation(Validator $validator) {
         throw new HttpResponseException(response()->json([
-        	'status'=> 0,
-        	'messages'=> $messages,
-        ])); 
-	}
+            'code' => 406,
+            'messages' => $validator->errors()
+        ], 422));
+    }
 
     protected function prepareForValidation()
     {

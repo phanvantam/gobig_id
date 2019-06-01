@@ -11,54 +11,20 @@
 |
 */
 
-$router->get('/', 'ExampleController@index');
-
-$router->group(['prefix' => 'fanpage'], function () use ($router) {
-    $router->get('/', 'FanpageController@index');
-
-    $router->group(['prefix' => 'script'], function () use ($router) {
-        $router->get('keyword/{fanpage_id:\d*}', 'FanpageController@scriptKeyword');
-        $router->post('keyword/add/{fanpage_id:\d*}', 'FanpageController@scriptKeywordAdd');
-        $router->get('keyword/beforeEdit/{id:\d*}', 'FanpageController@scriptKeywordBeforeEdit');
-        $router->post('keyword/edit/{id:\d*}', 'FanpageController@scriptKeywordEdit');
-        $router->get('search', 'FanpageController@searchScript');
-
-        $router->get('started/beforeEdit/{fanpage_id:\d*}', 'FanpageController@scriptStartedBeforeEdit');
-         $router->post('started/add/{fanpage_id:\d*}', 'FanpageController@scriptStartedAdd');
+$router->group(['prefix' => 'api'], function () use ($router) {
+    $router->group(['prefix' => 'v1'], function () use ($router) {
+        $router->group(['prefix' => 'user'], function () use ($router) {
+            $router->get('/', 'UserController@index');
+            $router->get('{id:\d*}', 'UserController@getUser');
+            $router->post('find', 'UserController@findUser');
+            $router->post('create', 'UserController@createUser');
+            $router->post('{id:\d*}/update', 'UserController@updateUser');
+        });
+        $router->group(['prefix' => 'type'], function () use ($router) {
+            $router->get('/', 'TypeController@index');
+            $router->get('{id:\d*}', 'TypeController@getType');
+            $router->post('create', 'TypeController@createType');
+            $router->post('{id:\d*}/update', 'TypeController@updateType');
+        });
     });
-   
-    $router->get('scriptConnect/{fanpage_id:\d*}', 'FanpageController@listScriptConnect');
-    $router->get('scriptPocess/{fanpage_script_id:\d*}', 'FanpageController@scriptProcess');
-
-});
-
-$router->group(['prefix' => 'script'], function () use ($router) {
-    $router->get('/', 'ScriptController@index');
-    $router->get('formData', 'ScriptController@formData');
-    $router->post('add', 'ScriptController@add');
-    $router->get('edit/{id:\d*}', 'ScriptController@beforeEdit');
-    $router->post('edit/{id:\d*}', 'ScriptController@edit');
-});
-
-$router->group(['prefix' => 'customer'], function () use ($router) {
-    $router->get('/', 'CustomerController@index');
-});
-
-$router->group(['prefix' => 'formData'], function () use ($router) {
-    $router->get('/', 'FormDataController@index');
-    $router->post('add', 'FormDataController@add');
-    $router->post('edit/{form_data_id:\d*}', 'FormDataController@edit');
-    $router->get('show/{form_data_id:\d*}', 'FormDataController@show');
-    $router->get('beforeEdit/{form_data_id:\d*}', 'FormDataController@beforeEdit');
-    $router->post('addValue/{form_data_id:\d*}', 'FormDataController@addValue');
-});
-
-$router->group(['prefix' => 'webhook'], function () use ($router) {
-    $router->get('/', 'WebhookController@index');
-    $router->post('/', 'WebhookController@reply');
-    $router->get('/log', 'WebhookController@log');
-});
-
-$router->group(['prefix' => 'user'], function () use ($router) {
-    $router->post('add', 'UserController@add');
 });
