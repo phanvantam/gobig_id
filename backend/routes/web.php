@@ -1,5 +1,5 @@
 <?php
-
+use App\Helpers\TokenJWT;
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -10,6 +10,17 @@
 | and give it the Closure to call when that URI is requested.
 |
 */
+
+$router->get('jwt/create',function() {
+    $token_jwt = new TokenJWT;
+    $token = $token_jwt->create(['user_id'=> 11]);
+    dd($token);
+});
+$router->get('jwt/verify',function() {
+    $token_jwt = new TokenJWT;
+    $token = $token_jwt->verify();
+    dd($token);
+});
 
 $router->group(['prefix' => 'api'], function () use ($router) {
     $router->group(['prefix' => 'v1'], function () use ($router) {
