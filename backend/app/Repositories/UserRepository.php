@@ -2,49 +2,57 @@
 
 namespace App\Repositories;
 
-use App\Models\User;
 use App\Repositories\UserRepositoryInterface;
-use App\Transformers\UserTransformer;
-use App\Helpers\Functions;
+use App\Models\User;
 
 class UserRepository implements UserRepositoryInterface
 {   
-    public function search($data)
+
+    public function getByFilter($params=[])
     {
-        $user = new User;
-        foreach ($data as $key => $value) {
-            $user = $user->where($key,$value);
+        $query = new User;
+        if($params['fullname'] !== null) {
+            $query = $query->where('use_fullname', 'LIKE', "%{$params['fullname']}%");
         }
-        return $user->first();
+        $result = $query->paginate($params['per']);
+        return $result;
     }
 
-    public function index($filter)
+    public function getByCode($value)
     {
-        $data = User::where('use_name', 'LIKE', "%{$filter['s']}%")
-            ->orderBy('use_updated_at')
-            ->paginate(10);
-        return [
-            'data' => Functions::transformer($data,0,new UserTransformer,'type'),
-            'paginate' => [
-                'current'=> $data->currentPage(),
-                'total'=> $data->lastPage(),
-                'per'=> $data->perPage(),
-            ]
+        $result = User::where('use_code', $value)->first();
+        return $result;
+    }
+
+    public function makeUniqueCode()
+    {
+        $code = uniqid("ID_", true);
+        return $code;
+    }
+
+    public function makeSaltCode()
+    {
+        $salt = md5($this->makeUniqueCode());
+        return $salt;
+    }
+
+    public function makePasswordCode($password, $salt)
+    {
+        $value = md5(implode('.', [$password, $salt]));
+        return $value;
+    }
+
+    public function create($input)
+    {
+        $data = [
+            'use_fullname'=> $input['fullname'],
+            'use_email'=> $input['email'],
+            'use_salt'=> $input['salt'],
+            'use_code'=> $input['code'],
+            'use_password_code'=> $input['password_code'],
+            'use_salt'=> $input['salt'],
         ];
-    }
-
-    public function find($id)
-    {
-        return User::where('use_id',$id)->first();
-    }
-
-    public function update($id,$data)
-    {
-        return User::where('use_id',$id)->update($data);
-    }
-
-    public function firstOrCreate($find,$data = [])
-    {
-        return User::firstOrCreate($find,$data);
+        $record_id = User::insertGetId($data);
+        return $record_id;
     }
 }

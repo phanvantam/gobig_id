@@ -16,7 +16,8 @@ class MainRequest extends FormRequest
 
     public function __construct(Request $request)
     {
-        $action = explode('@', $request->route()[1]['uses'])[1];
+        $action = '_'.explode('@', $request->route()[1]['uses'])[1];
+
         $result = method_exists($this, $action) ? call_user_func([$this, $action]) : [];
 
         $this->authorize    = isset($result['authorize']) ? $result['authorize'] : true;
@@ -40,17 +41,21 @@ class MainRequest extends FormRequest
     }
 
     // public function attributes() {
-    //     return [
-    //         'keywords'=> 'Từ khoá',
-    //         'script_id'=> 'Kịch bản',
-    //     ];
     // }
 
-    protected function failedValidation(Validator $validator) {
+    protected function failedValidation(Validator $validator) { 
+        $messages = [
+            'fields'=> [],
+            'list' => []
+        ];
+        foreach($validator->errors()->messages() as $key => $value) {
+            $messages['fields'][$key] = $value[0];
+            $messages['list'][] = $value[0];
+        }
         throw new HttpResponseException(response()->json([
-            'code' => 406,
-            'messages' => $validator->errors()
-        ], 422));
+            'status'=> 0,
+            'messages'=> $messages,
+        ])); 
     }
 
     protected function prepareForValidation()

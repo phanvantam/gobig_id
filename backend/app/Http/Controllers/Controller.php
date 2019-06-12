@@ -6,11 +6,11 @@ use Laravel\Lumen\Routing\Controller as BaseController;
 
 class Controller extends BaseController
 {
-    protected function response($data=[],$code = 200)
+    protected function response($data=[],$status = 1)
     {
     	return response()->json([
-    		'code' => $code ,
-    		'data' => $data
+    		'status'=> $status,
+    		'data'=> $data
     	]);
     }
 }

@@ -7,7 +7,8 @@ class RepositoryServiceProvider extends ServiceProvider {
 	
 	public function register()
 	{
-		$this->app->bind('App\Repositories\TypeRepositoryInterface', 'App\Repositories\TypeRepository');
+		$this->app->bind('App\Repositories\AuthRepositoryInterface', 'App\Repositories\AuthRepository');
 		$this->app->bind('App\Repositories\UserRepositoryInterface', 'App\Repositories\UserRepository');
+		$this->app->bind('App\Repositories\PermissionRepositoryInterface', 'App\Repositories\PermissionRepository');
 	}
 }

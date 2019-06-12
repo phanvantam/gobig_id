@@ -2,13 +2,17 @@ module.exports = {
     // mode: 'history',
 	routes: [
         {
-            path: '/user',
+            path: '/nguoi-dung',
             name: 'userIndex',
             component: () => import('@/components/user/index')
-        },{
-            path: '/type',
-            name: 'typeIndex',
-            component: () => import('@/components/type/index')
+        },
+        {
+            path: '/dang-nhap',
+            name: 'login',
+            meta: {
+                layout: 'client'
+            },
+            component: () => import('@/components/user/login')
         },
 	]
 };

@@ -58,12 +58,12 @@ $app->singleton(
 */
 
 $app->middleware([
-     App\Http\Middleware\CorsMiddleware::class,
+    App\Http\Middleware\CorsMiddleware::class,
 ]);
 
-// $app->routeMiddleware([
-//     'auth' => App\Http\Middleware\Authenticate::class,
-// ]); 
+$app->routeMiddleware([
+    'auth' => App\Http\Middleware\AuthMiddleware::class,
+]); 
 
 /*
 |--------------------------------------------------------------------------
@@ -77,8 +77,6 @@ $app->middleware([
 */
 
 $app->register(App\Providers\AppServiceProvider::class);
-// $app->register(App\Providers\AuthServiceProvider::class);
-// $app->register(App\Providers\EventServiceProvider::class);
 $app->register(App\Providers\RepositoryServiceProvider::class);
 $app->register(Urameshibr\Providers\FormRequestServiceProvider::class);
 
@@ -95,7 +93,6 @@ $app->register(Urameshibr\Providers\FormRequestServiceProvider::class);
 
 $app->router->group([
     'namespace' => 'App\Http\Controllers',
-    // 'middleware'=> ['cors']
 ], function ($router) {
     require __DIR__.'/../routes/web.php';
 });

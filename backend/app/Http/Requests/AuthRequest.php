@@ -5,18 +5,16 @@ namespace App\Http\Requests;
 use App\Http\Requests\MainRequest;
 use Illuminate\Http\Request;
 
-class UserRequest extends MainRequest
+class AuthRequest extends MainRequest
 {
 
-    public function _create()
+    public function _login()
     {
     	$data = [
-            'fullname' => Request::json('fullname'),
             'email' => Request::json('email'),
             'password' => Request::json('password'),
         ];
         $rules = [
-            'fullname'=> 'required',
             'email' => 'required',
             'password' => 'required',
         ];

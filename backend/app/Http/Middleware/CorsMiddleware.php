@@ -15,11 +15,15 @@ class CorsMiddleware
      */
     public function handle($request, Closure $next)
     {
-        header('Access-Control-Allow-Origin:  *');
-        // header('Access-Control-Allow-Origin:  http://localhost:4200');
-        header('Access-Control-Allow-Headers:  Content-Type, X-Auth-Token, Authorization, Origin');
-        header('Access-Control-Allow-Methods:  POST, GET');
-        
-        return $next($request);
+        header('access-control-allow-origin: *');
+        header('access-control-allow-credentials: true');
+        header('access-control-allow-headers: Content-Type, Authorization');
+        header('access-control-allow-methods: GET,POST,OPTIONS,PUT,DELETE,PATCH');
+        if ($request->isMethod('OPTIONS')) {
+            header('access-control-max-age: 1728000');
+            return response()->json();
+        } else {
+            return $next($request);
+        }
     }
 }

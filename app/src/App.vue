@@ -12,6 +12,8 @@
 </template>
 
 <script>
+import HelperIndex from '@/helper/index.js';
+
 export default {
     components: {
         layoutIndex: ()=> import('@/layouts/index.vue'),
@@ -19,13 +21,15 @@ export default {
     },
     computed: {
         layout() {
-            switch(this.arrayGet(this.$route, 'meta.layout')) {
-                case 'client': 
-                    return 'layoutClient'
-                break;
-                default:
-                    return 'layoutIndex'
-                break;
+            if(this.$route.name !== null) {
+                switch(HelperIndex.arrayGet(this.$route.meta, 'layout')) {
+                    case 'client': 
+                        return 'layoutClient'
+                    break;
+                    default:
+                        return 'layoutIndex'
+                    break;
+                }
             }
         }
     }

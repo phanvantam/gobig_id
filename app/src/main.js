@@ -4,7 +4,6 @@ import Vue from 'vue';
 import App from '@/App';
 import router from '@/router/loader.js';
 import vue_meta from 'vue-meta';
-import helper from '@/plugins/helper.js';
 
 import Notifications from 'vue-notification';
 
@@ -12,7 +11,7 @@ import Notifications from 'vue-notification';
 
 Vue.use(vue_meta);
 Vue.use(Notifications);
-Vue.use(helper);
+
 /* eslint-disable no-new */
 new Vue({
 	el: '#app',
