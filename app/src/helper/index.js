@@ -2,8 +2,6 @@ import Env from'@/config/env.js';
 
 export default {
 	arrayGet(data, fields='', $default=null) {
-		var stringify = require('json-stringify-safe');
-		data = JSON.parse(stringify(data));
 		fields = fields.split('.');
 		for(let stt in fields) {
 			let key = fields[stt];

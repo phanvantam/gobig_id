@@ -20,6 +20,15 @@ export default {
 		};
 		return response;
     },
+    async getInfo(input) {
+        const result = await Repository.get(`${resource}/info`);
+        const response = Parser.run({
+            module: 'User',
+            data: HelperIndex.arrayGet(result, 'data', {}),
+            type: 'object'
+        })
+        return response;
+    },
     login(input) {
         return Repository.post(`/v1/auth/login`, {
         	email: input.email, 

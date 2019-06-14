@@ -4,7 +4,7 @@
             <div class="folders-content">
                 <div class="show_list">
                     <div class="list_title">
-                        <label for=""><i class="icon ion-md-cart"></i> Danh Sách Sản Phẩm</label>
+                        <label for=""><i class="icon ion-md-cart"></i> Danh sách người dùng</label>
                         <div class="menu-bot-folder each-item-new">
                             <div class="text-ellipsis menu-item" data-toggle="modal" data-target="#user-add">
                                 <a href="javascript:;" >
@@ -46,7 +46,6 @@
         />
   </div>
 </template>
-
 
 <script>
 import UserRepository from '@/repositories/UserRepository'

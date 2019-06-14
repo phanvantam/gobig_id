@@ -3,7 +3,7 @@ module.exports = {
 	routes: [
         {
             path: '/nguoi-dung',
-            name: 'userIndex',
+            name: 'user',
             component: () => import('@/components/user/index')
         },
         {
@@ -13,10 +13,12 @@ module.exports = {
         },
         {
             path: '/phan-quyen',
+            name: 'permission',
             component: () => import('@/components/permission/index')
         },
         {
             path: '/phan-quyen/du-an',
+            name: 'permissionProject',
             component: () => import('@/components/permission/project/index')
         },
         {

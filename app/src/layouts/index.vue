@@ -13,87 +13,57 @@
                          style="display: none">
                 </button>
             </div>
-            <div class="sidebar">
+            <div class="sidebar" v-if="user !== null">
                 <ul class="sidebar-menu">
                     <li class="item first">
                         <a href="javascript:;" class="member link">
                             <img src="https://graph.facebook.com/1914661111981139/picture?height=50&width=50" alt=""
                                  class="img avatar">
-                            <span>Nguyễn Long</span>
+                            <span>{{ user.fullname }}</span>
                             <a href="javascript:;">
                                 <i class="fa fa-bell-o"></i>
                             </a>
-                            <ul class="dropdown-menu">
-                                <li class="header">bạn có 0 thông báo mới</li>
-                                <li class="footer"><a href="javascript:;">Xem tất cả</a></li>
+                            <ul class="dropdown-menu-item">
+                                <li class="">
+                                    <a class="#">
+                                        <i class="icon ion-md-reorder"></i>
+                                        <span>Đăng xuất</span>
+                                    </a>
+                                </li>
                             </ul>
                         </a>
                     </li>
-                    <!-- <li class="list-bot item">
-                        <router-link :to="{ name: 'userIndex'}" class="link">
-                            <i class="icon ion-logo-wordpress"></i>
+                    <li class="support item">
+                        <router-link :to="{name:'user'}" class="link">
+                            <i class="fa fa-question-circle"></i>
                             <span>Người dùng</span>
                         </router-link>
-                    </li><li class="list-bot item">
-                        <router-link :to="{ name: 'typeIndex'}" class="link">
-                            <i class="icon ion-logo-wordpress"></i>
-                            <span>Cấp độ</span>
-                        </router-link>
-                    </li> -->
+                    </li>
                     <li class="support item">
-                        <a href="javascript:;" class="link">
+                        <router-link :to="{name:'permission'}" class="link">
                             <i class="fa fa-question-circle"></i>
-                            <span>Hỗ trợ</span>
-                        </a>
-                        <div class="popper show-popup-support">
-                            <ul class="list-inline help-list">
-                                <li class="text-left">
-                                    <a target="_blank" href="">
-                                        <i class="fa fa-life-ring"></i>
-                                        <span>Hướng dẫn sử dụng</span></a></li>
-                                <li class="text-left">
-                                    <a target="_blank" href="">
-                                        <i class="fa fa-comment"></i>
-                                        <span>Livechat hỗ trợ 1:1</span></a>
-                                </li>
-                                <li class="text-left">
-                                    <a target="_blank" href="">
-                                        <i class="fa fa-users"></i>
-                                        <span>Cộng đồng hỗ trợ</span></a>
-                                </li>
-                                <li class="text-left"><a class="hotline">
-                                    <i class="fa fa-phone"></i>
-                                    <span><span>Hotline&nbsp;</span>
-                                                    <span>0963195861</span>
-                                                </span>
-                                </a>
-                                </li>
-                                <li>
-                                    <div class="ref-permission-container">
-                                        <p>Click vào nút bấm này nếu bot dừng hoạt động</p>
-                                        <button type="button" class="btn btn-default btn-messenger btn-flat">Refresh
-                                            Permissions
-                                        </button>
-                                    </div>
-                                </li>
-                                <li class="text-left">
-                                    <div class="row">
-                                        <div class="col-xs-6">
-                                            <a target="_blank" href="">Terms Of Service</a>
-                                        </div>
-                                        <div class="col-xs-6">
-                                            <a target="_blank" href="">Privacy Policy</a>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
+                            <span>Phân quyền</span>
+                        </router-link>
+                        <ul class="dropdown-menu-item">
+                            <li class="">
+                                <router-link :to="{name:'permission'}">
+                                    <i class="icon ion-md-reorder"></i>
+                                    <span>Danh sách</span>
+                                </router-link>
+                            </li>
+                            <li class="">
+                                <router-link :to="{name:'permissionProject'}">
+                                    <i class="icon ion-md-reorder"></i>
+                                    <span>Dự án</span>
+                                </router-link>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
             </div>
         </div>
         <div class="content-wrapper">
-            <div class="bot-scene-title">
+         <!--    <div class="bot-scene-title">
                 <div class="bot-scene-title-content bot-title-content">
                     <div class="scene-title">
                         <nav>
@@ -101,7 +71,7 @@
                         </nav>
                     </div>
                     <div class="scene-tools">
-                        <!-- <div class="flex-display">
+                        <div class="flex-display">
                             <div class="dashboard_page__img">
                                 <img src="//graph.facebook.com/946385792221717/picture?width=32&amp;height=32"
                                      class="radius-cycle" style="height: 34px;"></div>
@@ -111,19 +81,36 @@
                                     View Đồ Ăn
                                 </div>
                             </div>
-                        </div> -->
+                        </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <router-view/>
         </div>
     </div>
 </template>
 
 <script>
-    export default {
-        name: 'App'
+import UserRepository from '@/repositories/UserRepository'
+import HelperIndex from '@/helper/index.js'
+
+export default {
+    name: 'App',
+    data: ()=> ({
+        user: null 
+    }),
+    created() {
+        this.getData();
+    },
+    methods: {
+        getData() {
+            UserRepository.getInfo()
+            .then(response=> {
+                this.user = response;
+            })
+        }
     }
+}
 </script>
 <style lang="scss"></style>
 

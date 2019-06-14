@@ -1,4 +1,5 @@
 import Axios from 'axios'
+import Router from '@/router/loader'
 import Env from'@/config/env.js';
 import HelperIndex from '@/helper/index';
 import NProgress from 'nprogress'
@@ -35,7 +36,12 @@ instance.interceptors.response.use(function(response) {
 		}
 	}
 	return result;
+}, function(error) {
+	switch(error.response.status) {
+		case 401: 
+			Router.push({name: 'login'});
+		break;
+	}
 });
-
 
 export default instance;

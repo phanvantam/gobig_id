@@ -41,9 +41,9 @@
                 </div>
             </div>
         </div>
-<!--         <user-add 
+        <user-add 
 	        @reload="getData"
-        /> -->
+        />
   </div>
 </template>
 
@@ -56,7 +56,7 @@ export default {
     data : []
   }),
   components: {
-    // userAdd: ()=> import('./add')
+    userAdd: ()=> import('./add')
   },
   watch: {},
   created() {

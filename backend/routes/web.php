@@ -17,7 +17,7 @@ $router->group(['prefix' => 'v1'], function () use ($router) {
         'middleware'=> 'auth'
     ], function () use ($router) {
         $router->get('/', 'UserController@index');
-        $router->get('permission', 'UserController@permission');
+        $router->get('info', 'UserController@info');
         $router->post('create', 'UserController@create');
     });
 
@@ -25,7 +25,10 @@ $router->group(['prefix' => 'v1'], function () use ($router) {
         $router->post('login', 'AuthController@login');
     });
 
-    $router->group(['prefix' => 'permission'], function () use ($router) {
+    $router->group([
+        'prefix' => 'permission',
+        'middleware'=> 'auth'
+    ], function () use ($router) {
         $router->get('/', 'PermissionController@index');
         $router->post('create', 'PermissionController@create');
         $router->group(['prefix' => 'module'], function () use ($router) {
