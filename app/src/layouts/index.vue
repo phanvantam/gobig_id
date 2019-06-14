@@ -29,7 +29,7 @@
                             </ul>
                         </a>
                     </li>
-                    <li class="list-bot item">
+                    <!-- <li class="list-bot item">
                         <router-link :to="{ name: 'userIndex'}" class="link">
                             <i class="icon ion-logo-wordpress"></i>
                             <span>Người dùng</span>
@@ -39,7 +39,7 @@
                             <i class="icon ion-logo-wordpress"></i>
                             <span>Cấp độ</span>
                         </router-link>
-                    </li>
+                    </li> -->
                     <li class="support item">
                         <a href="javascript:;" class="link">
                             <i class="fa fa-question-circle"></i>

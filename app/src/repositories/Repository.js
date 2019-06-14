@@ -16,12 +16,12 @@ const instance = Axios.create({
 });
 
 instance.interceptors.request.use(function (config) {
-	NProgress.start();
+	// NProgress.start();
     return config;
 });
 
 instance.interceptors.response.use(function(response) {
-    NProgress.done();
+    // NProgress.done();
 	let result = {
 		status: 1,
 		data: []

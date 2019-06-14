@@ -11,4 +11,13 @@ class Permission extends Model {
 
     const CREATED_AT = 'per_created_at';
 	const UPDATED_AT = 'per_updated_at';
+
+	public function project()
+	{
+		return $this->belongsTo(
+			'App\Models\Project', 
+			'per_project_id', 
+			'pro_id'
+		);
+	}
 }

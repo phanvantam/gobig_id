@@ -4,7 +4,7 @@
             <div class="folders-content">
                 <div class="show_list">
                     <div class="list_title">
-                        <label for=""><i class="icon ion-md-cart"></i> Danh Sách Sản Phẩm</label>
+                        <label for=""><i class="icon ion-md-cart"></i> Danh Sách Module</label>
                         <div class="menu-bot-folder each-item-new">
                             <div class="text-ellipsis menu-item" data-toggle="modal" data-target="#user-add">
                                 <a href="javascript:;" >
@@ -20,8 +20,8 @@
                                 <thead>
                                     <tr>
                                       <td>STT</td>
-                                      <td>Họ và tên</td>
-                                      <td>Email</td>
+                                      <td>Code</td>
+                                      <td>Tên</td>
                                       <td>Ngày tạo</td>
                                       <td>Tác vụ</td>
                                     </tr>
@@ -29,8 +29,8 @@
                                 <tbody class="table-product-body">
                                     <tr v-for="item in data">
                                         <td></td>
-                                        <td>{{ item.fullname }}</td>
-                                        <td>{{ item.email }}</td>
+                                        <td>{{ item.code }}</td>
+                                        <td>{{ item.name }}</td>
                                         <td>{{ item.created_at }}</td>
                                         <td></td>
                                     </tr>
@@ -42,17 +42,20 @@
             </div>
         </div>
         <user-add 
-          @:reload="getData"
+        	:project_id="project_id"
+        	:list_module="data"
+	        @reload="getData"
         />
   </div>
 </template>
 
 
 <script>
-import UserRepository from '@/repositories/UserRepository'
+import PermissionRepository from '@/repositories/PermissionRepository'
 
 export default {
   data: () => ({
+  	project_id: 0,
     data : []
   }),
   components: {
@@ -60,13 +63,14 @@ export default {
   },
   watch: {},
   created() {
+    this.project_id = this.$route.params.project_id;
     this.getData();
   },
   methods: {
     getData() {
-      UserRepository.getByFilter([])
+      PermissionRepository.getListModule(this.project_id)
       .then(response=> {
-        this.data = response.users;
+        this.data = response;
       })
     }
   }

@@ -24,4 +24,17 @@ $router->group(['prefix' => 'v1'], function () use ($router) {
     $router->group(['prefix' => 'auth'], function () use ($router) {
         $router->post('login', 'AuthController@login');
     });
+
+    $router->group(['prefix' => 'permission'], function () use ($router) {
+        $router->get('/', 'PermissionController@index');
+        $router->post('create', 'PermissionController@create');
+        $router->group(['prefix' => 'module'], function () use ($router) {
+            $router->get('/{project_id:\d*}', 'PermissionController@listModule');
+            $router->post('create', 'PermissionController@createModule');
+        });
+        $router->group(['prefix' => 'project'], function () use ($router) {
+            $router->get('/', 'PermissionController@listProject');
+            $router->post('create', 'PermissionController@createProject');
+        });
+    });
 });

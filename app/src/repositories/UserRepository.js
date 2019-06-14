@@ -26,4 +26,11 @@ export default {
         	password: input.password, 
         });
     },
+    add(input) {
+        return Repository.post(`/v1/user/create`, {
+        	email: input.email, 
+        	password: input.password, 
+        	fullname: input.fullname
+        });
+    },
 }
