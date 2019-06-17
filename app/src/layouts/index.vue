@@ -526,6 +526,10 @@ export default {
             })
         }
     },
+    mounted() {
+        // $('.sidebar-menu').tree({});
+        // $('.main-sidebar').controlSidebar({});
+    }
 }
 </script>
 <style lang="scss"></style>

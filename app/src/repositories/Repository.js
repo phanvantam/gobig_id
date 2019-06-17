@@ -7,8 +7,7 @@ import 'nprogress/nprogress.css'
  
 const instance = Axios.create({
 	baseURL: Env.BASE_URL_API,
-	headers: {
-		Authorization: "Bearer "+ HelperIndex.getAccessToken(),        
+	headers: {     
 		'Content-Type': 'application/json',
 		post: {
 	        'Content-Type': 'application/x-www-form-urlencoded',
@@ -18,7 +17,8 @@ const instance = Axios.create({
 
 instance.interceptors.request.use(function (config) {
 	// NProgress.start();
-    return config;
+	config.headers.Authorization = "Bearer "+ HelperIndex.getAccessToken();
+   return config;
 });
 
 instance.interceptors.response.use(function(response) {

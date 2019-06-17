@@ -4,10 +4,9 @@ import Vue from 'vue';
 import App from '@/App';
 import router from '@/router/loader.js';
 import vue_meta from 'vue-meta';
-
 import Notifications from 'vue-notification';
 
-// Vue.config.productionTip = false
+Vue.config.productionTip = false
 
 Vue.use(vue_meta);
 Vue.use(Notifications);
