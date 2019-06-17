@@ -1,50 +1,39 @@
 <template>
-	<div id="login">
-        <img class="imgs-login" src="https://gobig.com.vn/wp-content/uploads/2018/10/slide-gobig-1.jpg">
-        <div class="login-box">
-            <div class="login-logo">
-                <a href=""><img src="https://gobig.com.vn/wp-content/uploads/2018/09/logo-web-gobig-300x144.jpg" alt=""></a>
-            </div>
-            <div class="login-box-body">
-                <p class="login-box-msg"><strong>Đăng nhập để bắt đầu hệ thống của bạn</strong></p>
-                <form action="" method="post">
-                    <input type="hidden" class="action" value="login">
-                    <div class="form-group has-feedback">
-                        <div class="form-login-registration">
-                            <i class="fa fa-user"></i>
-                            <input v-model="data.email" type="text" name="usename" id="usename" placeholder="Tên đăng nhập..." class="form-control input-form-login-registration">
-                        </div>
-                        
-                        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
-                    </div>
-                    <div class="form-group has-feedback">
-                        <div class="form-login-registration">
-                             <i class="fa fa-lock"></i>
-                            <input v-model="data.password" type="password" name="password" id="password" placeholder="Mật khẩu..." class="form-control input-form-login-registration">
-                        </div>
-                        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
-                    </div>
-                    <div class="note-registration">
-                        <span>Bạn chưa có tài khoản <a href="">Đăng ký</a></span>
-                    </div>
-                    <div class="row row-checkbox">
-                        <div class="">
-                            <div class="checkbox icheck">
-                                <label for="">
-                                    <input type="checkbox" style="vertical-align: middle">
-                                    Ghi nhớ đăng nhập
-                                </label>
-                            </div>
-                        </div>
-                        <div class="">
-                            <span class="btn btn-connect" @click="submit" >Đăng nhập</span>
-                        </div>
-                    </div>
-                </form>
-            </div>
+    <div class="login-box">
+  <div class="login-logo">
+    <a href="../../index2.html"><b>Admin</b>LTE</a>
+  </div>
+  <!-- /.login-logo -->
+  <div class="login-box-body">
+    <p class="login-box-msg">Sign in to start your session</p>
+
+    <div>
+      <div class="form-group has-feedback">
+        <input type="email" v-model="data.email" class="form-control" placeholder="Email">
+        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <input type="password" v-model="data.password" class="form-control" placeholder="Password">
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+      </div>
+      <div class="row">
+        <div class="col-xs-8">
+          <div class="checkbox icheck">
+            <label>
+              <input type="checkbox"> Remember Me
+            </label>
+          </div>
         </div>
-        <div class="overlay"></div>
+        <!-- /.col -->
+        <div class="col-xs-4">
+          <button type="submit" class="btn btn-primary btn-block btn-flat"  @click="submit">Đăng nhập</button>
+        </div>
+        <!-- /.col -->
+      </div>
     </div>
+  </div>
+  <!-- /.login-box-body -->
+</div>
 </template>
 
 <script>
@@ -70,9 +59,10 @@ export default {
             case 1: 
                 HelperIndex.saveAccessToken(response.data.access_token, response.data.exp);
                 this.$notify({
-                    text: 'Đăng nhập thành thành công',
+                    text: 'Đăng nhập thành công',
                     type: 'success'
                 });
+                this.$router.push({name: 'user'});
             break;
             case 0:
             	if(response.messages === null) {

@@ -525,7 +525,7 @@ export default {
                 this.user = response;
             })
         }
-    }
+    },
 }
 </script>
 <style lang="scss"></style>
