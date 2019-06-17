@@ -21,7 +21,8 @@
                         </select>
                     </div>
                     <div class="form-group list-module">
-                        
+                        <div class="colums">
+                        </div>
                     </div>
 	            </div>
 	            <!-- Modal footer -->

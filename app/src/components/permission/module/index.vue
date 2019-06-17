@@ -1,29 +1,41 @@
 <template>
-  <div id="index-product" class="">
-  	<div class="bot-scene-content">
-            <div class="folders-content">
-                <div class="show_list">
-                    <div class="list_title">
-                        <label for=""><i class="icon ion-md-cart"></i> Danh Sách Module</label>
-                        <div class="menu-bot-folder each-item-new">
-                            <div class="text-ellipsis menu-item" data-toggle="modal" data-target="#user-add">
-                                <a href="javascript:;" >
-                                    <i class="fa fa-plus"></i>
-                                    <span>Thêm mới</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel panel-ui table-product">
-                        <div class="col-md-12 padding-0">
-                            <table class="table table-hover">
-                                <thead>
+  <div class="content-wrapper">
+    <section class="content-header">
+      <h1>
+        Người dùng
+        <small>Danh sách</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="#">Tables</a></li>
+        <li class="active">Simple</li>
+      </ol>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <div class="box-tools">
+                <div class="input-group input-group-sm" style="width: 150px;">
+                  <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
+                  <div class="input-group-btn">
+                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body table-responsive">
+              <table class="table table-hover">
+               <thead>
                                     <tr>
-                                      <td>STT</td>
-                                      <td>Code</td>
-                                      <td>Tên</td>
-                                      <td>Ngày tạo</td>
-                                      <td>Tác vụ</td>
+                                      <th>STT</th>
+                                      <th>Code</th>
+                                      <th>Tên</th>
+                                      <th>Ngày tạo</th>
+                                      <th>Tác vụ</th>
                                     </tr>
                                 </thead>
                                 <tbody class="table-product-body">
@@ -35,20 +47,16 @@
                                         <td></td>
                                     </tr>
                                 </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+              </table>
             </div>
+            <!-- /.box-body -->
+          </div>
         </div>
-        <user-add 
-        	:project_id="project_id"
-        	:list_module="data"
-	        @reload="getData"
-        />
+      </div>
+    </section>
+    <!-- /.content -->
   </div>
 </template>
-
 
 <script>
 import PermissionRepository from '@/repositories/PermissionRepository'

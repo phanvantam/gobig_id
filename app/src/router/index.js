@@ -1,6 +1,11 @@
 module.exports = {
-    // mode: 'history',
+    mode: 'history',
 	routes: [
+        {
+            path: '/test',
+            name: 'test',
+            component: () => import('@/components/test')
+        },
         {
             path: '/nguoi-dung',
             name: 'user',
