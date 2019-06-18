@@ -4,7 +4,7 @@ node_modules/
 .env.local
 .env.*.local
 
-/dist
+#/dist
 /src/config/env.js
 # Log files
 npm-debug.log*
