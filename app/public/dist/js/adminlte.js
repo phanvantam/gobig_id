@@ -657,7 +657,6 @@ throw new Error('AdminLTE requires jQuery')
   // Plugin Definition
   // =================
   function Plugin(option) {
-    console.log('ff');
     return this.each(function () {
       var $this = $(this);
       var data  = $this.data(DataKey);
@@ -1093,7 +1092,7 @@ throw new Error('AdminLTE requires jQuery')
   Tree.prototype._setUpListeners = function () {
     var that = this;
 
-    $('html').on('click', `${this.options.trigger}`, function (event) {
+    $(this.element).on('click', this.options.trigger, function (event) {
       that.toggle($(this), event);
     });
   };
@@ -1131,5 +1130,4 @@ throw new Error('AdminLTE requires jQuery')
       Plugin.call($(this));
     });
   });
-
 }(jQuery);

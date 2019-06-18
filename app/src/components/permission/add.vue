@@ -1,11 +1,13 @@
 <template>
-	<div class="modal modal_sc1" id="user-add">
+	<div class="modal modal_sc1" id="permission-add">
 	    <div class="modal-dialog">
 	        <div class="modal-content">
 	            <!-- Modal Header -->
 	            <div class="modal-header">
 	                <h4 class="modal-title">Thêm mới quyền</h4>
-	                <button type="button" class="close" data-dismiss="modal">&times;</button>
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
 	            </div>
 	            <!-- Modal body -->
 	            <div class="modal-body">

@@ -527,8 +527,7 @@ export default {
         }
     },
     mounted() {
-        // $('.sidebar-menu').tree({});
-        // $('.main-sidebar').controlSidebar({});
+        $('.sidebar-menu').tree();
     }
 }
 </script>
