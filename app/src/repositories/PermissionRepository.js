@@ -29,6 +29,13 @@ export default {
         })
         return response;
     },
+    add(input) {
+        return Repository.post(`${resource}/create`, {
+            title: input.name, 
+            project_id: input.project_id, 
+            modules_id: input.modules_id
+        });
+    },
     addModule(input) {
         return Repository.post(`${resource}/module/create`, {
         	name: input.name, 

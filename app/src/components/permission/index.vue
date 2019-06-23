@@ -54,7 +54,9 @@
       </div>
     </section>
     <!-- /.content -->
-    <permissionAdd />
+    <permissionAdd 
+      @reload="getData"
+    />
   </div>
 </template>
 

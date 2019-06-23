@@ -13,17 +13,22 @@
 	            <div class="modal-body">
 	                <div class="form-group">
 	                    <label for="">Tên:</label>
-	                    <input type="text" v-model="data.fullname" class="form-control">
+	                    <input type="text" v-model="data.name" class="form-control">
 	                </div>
                     <div class="form-group">
                         <label for="">Dự án:</label>
-                        <select class="form-control">
-                            <option>Chatbot</option>
-                            <option>Kho</option>
+                        <select class="form-control" v-model="data.project_id">
+                            <option value="null" disabled="">-- Chọn dự án --</option>
+                            <option v-for="item in projects" :value="item.id">{{ item.name }}</option>
                         </select>
                     </div>
-                    <div class="form-group list-module">
-                        <div class="colums">
+                    <div class="row form-group">
+                        <div class="col-xs-6" v-for="item in modules">
+                            <label>{{ item.name }}</label>
+                            <span class="help-block" style="cursor: pointer;" v-for="item in item.child" @click="addModule(item.id)" >
+                                <i :class="{fa: true, 'fa-circle-o': !data.modules.includes(item.id), 'fa-dot-circle-o': data.modules.includes(item.id)}"></i>
+                                {{ item.name }}
+                            </span>
                         </div>
                     </div>
 	            </div>
@@ -38,28 +43,38 @@
 </template>
 
 <script>
-import UserRepository from '@/repositories/UserRepository'
+import PermissionRepository from '@/repositories/PermissionRepository'
 
 export default {
     data: ()=> ({
         data: {
-            fullname: null, 
-            email: null, 
-            password: null,	
-        }
+            project_id: null, 
+            name: null,
+            modules: []
+        },
+        projects: [],
+        modules: []
     }),
+    watch: {
+        'data.project_id': function(value) {
+            if(value !== null) {
+                this.getModule();
+            }
+        }
+    },
     created() {
+        this.getProject();
     },
     methods: {
         submit() {
-        	UserRepository.add(this.data)
+        	PermissionRepository.add(Object.assign({}, this.data, {modules_id: this.data.modules.join(',')}))
             .then(response=> {
                 switch(response.status) {
                     case 1: 
                         $(this.$el).find('.close-modal').click();
                         this.$emit('reload');
                         this.$notify({
-                            text: 'Tạo mới người dùng thành công',
+                            text: 'Thêm quyền thành công',
                             type: 'success'
                         });
                     break;
@@ -73,6 +88,41 @@ export default {
                     break;
                 }
             })
+        },
+        getProject() {
+            PermissionRepository.getListProject()
+            .then(response=> {
+                this.projects = response;
+            })
+        },
+        getModule() {
+            PermissionRepository.getListModule(this.data.project_id)
+            .then(response=> {
+                this.modules = this.sortModuleByParent(response);
+            })
+        },
+        addModule(value) {
+            if(this.data.modules.includes(value)) {
+                this.data.modules.splice(this.data.modules.indexOf(value), 1);
+            } else {
+                this.data.modules.push(value);
+            }
+        },
+        sortModuleByParent(data) {
+            let result = [];
+            data.map(item=> {
+                if(item.parent_id === 0) {
+                    result.push(Object.assign({}, item, {child: []}));
+                }
+            })
+            result.map(item=> {
+                data.map(item_v2=> {
+                    if(item.id === item_v2.parent_id) {
+                        item.child.push(item_v2);
+                    }
+                })
+            })
+            return result;
         }
     }
 }

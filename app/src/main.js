@@ -2,8 +2,9 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
 import App from '@/App';
-import router from '@/router/loader.js';
+import router from '@/router/index.js';
 import vue_meta from 'vue-meta';
+import { store } from '@/store/index.js';
 import Notifications from 'vue-notification';
 
 Vue.config.productionTip = false
@@ -14,6 +15,7 @@ Vue.use(Notifications);
 /* eslint-disable no-new */
 new Vue({
 	el: '#app',
+	store,
 	router,
 	render: h => h(App)
 });

@@ -1,5 +1,5 @@
 import Axios from 'axios'
-import Router from '@/router/loader'
+import Router from '@/router/index'
 import Env from'@/config/env.js';
 import HelperIndex from '@/helper/index';
 import NProgress from 'nprogress'
