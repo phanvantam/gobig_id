@@ -29,6 +29,38 @@ export default {
         })
         return response;
     },
+    async getChild(user_id) {
+        const result = await Repository.get(`${resource}/child/${user_id}`);
+        const response = Parser.run({
+            module: 'User',
+            data: HelperIndex.arrayGet(result, 'data', []),
+        })
+        return response;
+    },
+    childAdd(input) {
+        return Repository.post(`${resource}/child/create`, {
+            parent_id: input.parent_id,
+            child_id: input.child_id,
+        });
+    },
+    permissionAdd(input) {
+        return Repository.post(`${resource}/permission/create`, {
+            permission_id: input.permission_id,
+            user_id: input.user_id,
+        });
+    },
+    async search(input) {
+        const result = await Repository.get(`${resource}/search`, {
+            params: {
+                query: input.query
+            }
+        });
+        const response = Parser.run({
+            module: 'User',
+            data: HelperIndex.arrayGet(result, 'data', []),
+        })
+        return response;
+    },
     login(input) {
         return Repository.post(`/v1/auth/login`, {
         	email: input.email, 
@@ -36,7 +68,7 @@ export default {
         });
     },
     add(input) {
-        return Repository.post(`/v1/user/create`, {
+        return Repository.post(`${resource}/create`, {
         	email: input.email, 
         	password: input.password, 
         	fullname: input.fullname

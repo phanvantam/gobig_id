@@ -56,6 +56,36 @@ class UserController extends Controller
         return $this->response($record_id);
     }
 
+    public function childCreate()
+    {
+        $request = [
+            'parent_id'=> $this->request->json('parent_id'),
+            'child_id'=> $this->request->json('child_id'),
+        ];
+        $record_id = $this->user->childCreate($request);
+        return $this->response($record_id);
+    }
+
+    public function permissionCreate()
+    {
+        $request = [
+            'permission_id'=> $this->request->json('permission_id'),
+            'user_id'=> $this->request->json('user_id'),
+        ];
+        $this->user->permissionAdd($request);
+        return $this->response();
+    }
+
+    public function search()
+    {
+        $request = [
+            'query'=> $this->request->input('query'),
+        ];
+        $result = $this->user->search($request);
+        $response = $result === null ? [] : $result->toArray();
+        return $this->response($response);
+    }
+
     public function info()
     {
         $user = $this->user->getByCode(USER_CODE);
@@ -65,6 +95,13 @@ class UserController extends Controller
             'code'=> $user->use_code,
             'id'=> $user->use_id,
         ];
+        return $this->response($response);
+    }
+
+    public function child($user_id)
+    {
+        $result = $this->user->getChild($user_id);
+        $response = $result === null ? [] : $result->toArray();
         return $this->response($response);
     }
 

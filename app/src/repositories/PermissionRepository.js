@@ -13,6 +13,23 @@ export default {
         })
         return response;
     },
+    async getByProject(project_id) {
+        const result = await Repository.get(`${resource}/getByProject/${project_id}`);
+        const response = Parser.run({
+            module: 'Permission',
+            data: HelperIndex.arrayGet(result, 'data', []), 
+        })
+        return response;
+    },
+    async getById(id) {
+        const result = await Repository.get(`${resource}/${id}`);
+        const response = Parser.run({
+            module: 'Permission',
+            data: HelperIndex.arrayGet(result, 'data', {}),
+            type: 'object' 
+        })
+        return response;
+    },
     async getListModule(project_id) {
         const result = await Repository.get(`${resource}/module/${project_id}`);
 		const response = Parser.run({

@@ -1,20 +1,17 @@
 <template>
-	<div class="modal modal_sc1" id="permission-add">
+	<div class="modal modal_sc1" id="user-add-permission">
 	    <div class="modal-dialog">
 	        <div class="modal-content">
 	            <!-- Modal Header -->
 	            <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	            	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-	                <h4 class="modal-title">Thêm mới quyền</h4>
+	                <h4 class="modal-title">Thêm quyền người dùng</h4>
+	                
 	            </div>
 	            <!-- Modal body -->
 	            <div class="modal-body">
-	                <div class="form-group">
-	                    <label for="">Tên:</label>
-	                    <input type="text" v-model="data.name" class="form-control">
-	                </div>
                     <div class="form-group">
                         <label for="">Dự án:</label>
                         <select class="form-control" v-model="data.project_id">
@@ -22,11 +19,18 @@
                             <option v-for="item in projects" :value="item.id">{{ item.name }}</option>
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label for="">Nhóm quyền:</label>
+                        <select class="form-control" v-model="data.permission_id">
+                            <option value="null" disabled="">-- Chọn nhóm quyền --</option>
+                            <option v-for="item in permissions" :value="item.id">{{ item.title }}</option>
+                        </select>
+                    </div>
                     <div class="row form-group">
                         <div class="col-xs-6" v-for="item in modules">
                             <label>{{ item.name }}</label>
-                            <span class="help-block" style="cursor: pointer;" v-for="item in item.child" @click="addModule(item.id)" >
-                                <i :class="{fa: true, 'fa-circle-o': !data.modules.includes(item.id), 'fa-dot-circle-o': data.modules.includes(item.id)}"></i>
+                            <span class="help-block" v-for="item in item.child">
+                                <i :class="{fa: true, 'fa-circle-o': !data.modules.includes(`${item.id}`), 'fa-dot-circle-o': data.modules.includes(`${item.id}`)}"></i>
                                 {{ item.name }}
                             </span>
                         </div>
@@ -44,30 +48,48 @@
 
 <script>
 import PermissionRepository from '@/repositories/PermissionRepository'
+import UserRepository from '@/repositories/UserRepository'
 
 export default {
     data: ()=> ({
         data: {
             project_id: null, 
-            name: null,
+            permission_id: null,
             modules: []
         },
         projects: [],
+        permissions: [],
         modules: []
     }),
     watch: {
         'data.project_id': function(value) {
             if(value !== null) {
-                this.getModule();
+            	this.data.permission_id = null;
+               this.getPermission();
+               this.getModule();
+            }
+        },
+        'data.permission_id': function(value) {
+            if(value !== null) {
+               this.getPermissionSelect();
             }
         }
+    },
+    props: {
+    	user_id: {
+    		type: Number
+    	}
     },
     created() {
         this.getProject();
     },
     methods: {
         submit() {
-        	PermissionRepository.add(Object.assign({}, this.data, {modules_id: this.data.modules.join(',')}))
+        	let params = {
+        		permission_id: this.data.permission_id,
+        		user_id: this.user_id
+        	};
+        	UserRepository.permissionAdd(params)
             .then(response=> {
                 switch(response.status) {
                     case 1: 
@@ -95,18 +117,23 @@ export default {
                 this.projects = response;
             })
         },
+        getPermission() {
+            PermissionRepository.getByProject(this.data.project_id)
+            .then(response=> {
+                this.permissions = response;
+            })
+        },
+         getPermissionSelect() {
+            PermissionRepository.getById(this.data.permission_id)
+            .then(response=> {
+               this.data.modules = response.modules_id.split(',');
+            })
+        },
         getModule() {
             PermissionRepository.getListModule(this.data.project_id)
             .then(response=> {
                 this.modules = this.sortModuleByParent(response);
             })
-        },
-        addModule(value) {
-            if(this.data.modules.includes(value)) {
-                this.data.modules.splice(this.data.modules.indexOf(value), 1);
-            } else {
-                this.data.modules.push(value);
-            }
         },
         sortModuleByParent(data) {
             let result = [];

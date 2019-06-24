@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Repositories\UserRepositoryInterface;
 use App\Models\User;
+use App\Models\UserChild;
 
 class UserRepository implements UserRepositoryInterface
 {   
@@ -18,10 +19,37 @@ class UserRepository implements UserRepositoryInterface
         return $result;
     }
 
+    public function search($params)
+    {
+        $query = new User;
+        if(!empty($params['query'])) {
+            $query = $query->where('use_fullname', 'LIKE', "%{$params['query']}%");
+            $query = $query->orWhere('use_email', 'LIKE', "%{$params['query']}%");
+        }
+        $result = $query->skip(0)->take(5)->get();
+        return $result;
+    }
+
     public function getByCode($value)
     {
         $result = User::where('use_code', $value)->first();
         return $result;
+    }
+
+    public function getChild($value)
+    {
+        $result = UserChild::where('usc_parent_id', $value)->leftJoin('users', 'use_id', 'usc_child_id')->get();
+        return $result;
+    }
+
+    public function childCreate($input)
+    {
+        $data = [
+            'usc_parent_id'=> $input['parent_id'],
+            'usc_child_id'=> $input['child_id']
+        ];
+        $record_id = UserChild::insertGetId($data);
+        return $record_id;
     }
 
     public function makeUniqueCode()
@@ -54,5 +82,10 @@ class UserRepository implements UserRepositoryInterface
         ];
         $record_id = User::insertGetId($data);
         return $record_id;
+    }
+
+    public function permissionAdd($input)
+    {
+        User::where('use_id', $input['user_id'])->update(['use_permission_id'=> $input['permission_id']]);
     }
 }

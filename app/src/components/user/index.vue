@@ -43,7 +43,14 @@
                     <td>{{ item.fullname }}</td>
                     <td>{{ item.email }}</td>
                     <td>{{ item.created_at }}</td>
-                    <td></td>
+                    <td>
+                      <span class="label label-primary" data-toggle="modal" data-target="#user-add-child" @click="component.user_add_child.user_id = item.id">
+                        <i class="fa fa-users"></i> Nhân viên
+                      </span>
+                      <span class="label label-primary" data-toggle="modal" data-target="#user-add-permission" @click="component.user_add_permission.user_id = item.id">
+                        <i class="fa fa-get-pocket"></i> Quyền
+                      </span>
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -55,6 +62,12 @@
     </section>
     <!-- /.content -->
     <userAdd />
+    <userAddChild 
+      :user_id="component.user_add_child.user_id"
+    />
+    <userAddPermission 
+      :user_id="component.user_add_permission.user_id"
+    />
   </div>
 </template>
 <script>
@@ -62,10 +75,20 @@ import UserRepository from '@/repositories/UserRepository'
 
 export default {
   data: () => ({
-    data : []
+    data : [],
+    component: {
+      user_add_child: {
+        user_id: null
+      },
+      user_add_permission: {
+        user_id: null
+      }
+    }
   }),
   components: {
-    userAdd: ()=> import('./add')
+    userAdd: ()=> import('./add'),
+    userAddChild: ()=> import('./add_child'),
+    userAddPermission: ()=> import('./add_permission'),
   },
   watch: {},
   created() {

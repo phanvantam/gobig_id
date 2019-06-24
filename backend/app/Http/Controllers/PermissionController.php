@@ -32,6 +32,20 @@ class PermissionController extends Controller
         return $this->response($result);
     }
 
+    public function getByProject($project_id)
+    {
+        $result = $this->permission->getByProject($project_id);
+
+        return $this->response($result);
+    }
+
+    public function getById($id)
+    {
+        $result = $this->permission->getById($id);
+
+        return $this->response($result);
+    }
+
     public function create()
     {
         $request = [

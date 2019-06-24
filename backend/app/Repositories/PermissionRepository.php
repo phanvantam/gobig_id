@@ -81,6 +81,12 @@ class PermissionRepository implements PermissionRepositoryInterface
 		return $result;
 	}
 
+	public function getByProject($value)
+	{
+		$result = Permission::where('per_project_id', $value)->get();
+		return $result;
+	}
+
 	public function getModuleCode($value)
 	{
 		$result = Module::whereIn('mod_id', explode(',', $value))->get();

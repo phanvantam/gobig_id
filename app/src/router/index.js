@@ -7,9 +7,8 @@ export default new Router({
     mode: 'history',
 	routes: [
         {
-            path: '/test',
-            name: 'test',
-            component: () => import('@/components/test')
+            path: '/',
+            component: () => import('@/components/user/index')
         },
         {
             path: '/nguoi-dung',
