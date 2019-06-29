@@ -89,11 +89,33 @@ class UserController extends Controller
     public function info()
     {
         $user = $this->user->getByCode(USER_CODE);
+
+        $result = $this->permission->getById($user->use_permission_id);
+
+        $modules = [
+            'code'=> [],
+            'list'=> []
+        ];
+        if($result->modules !== null) {
+            foreach($result->modules as $item) {
+                $modules['list'][] = [
+                    'name'=> $item->mod_name,
+                    'code'=> $item->mod_code
+                ];
+                $modules['code'][] = $item->mod_code;
+            }
+        }
+
         $response = [
             'fullname'=> $user->use_fullname,
             'email'=> $user->use_email,
             'code'=> $user->use_code,
             'id'=> $user->use_id,
+            'permission'=> [
+                'title'=> $result->per_title,
+                'id'=> $result->per_id,
+            ],
+            'modules'=> $modules
         ];
         return $this->response($response);
     }
