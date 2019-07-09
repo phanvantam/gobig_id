@@ -5,7 +5,7 @@ export default {
 		fields = fields.split('.');
 		for(let stt in fields) {
 			let key = fields[stt];
-			if(this.isArray(data) || this.isObject(data) && key in data) {
+			if((this.isArray(data) || this.isObject(data)) && key in data) {
 				data = data[key];
 			} else {
 				return $default;

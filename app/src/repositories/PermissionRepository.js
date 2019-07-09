@@ -53,6 +53,28 @@ export default {
             modules_id: input.modules_id
         });
     },
+    async position() {
+        const result = await Repository.get(`${resource}/position`);
+        const response = Parser.run({
+            module: 'Position',
+            data: HelperIndex.arrayGet(result, 'data', []), 
+        })
+        return response;
+    },
+    async positionSearch() {
+        const result = await Repository.get(`${resource}/position/search`);
+        const response = Parser.run({
+            module: 'Position',
+            data: HelperIndex.arrayGet(result, 'data', []), 
+        })
+        return response;
+    },
+    positionAdd(input) {
+        return Repository.post(`${resource}/position/create`, {
+            name: input.name, 
+            key: input.key
+        });
+    },
     addModule(input) {
         return Repository.post(`${resource}/module/create`, {
         	name: input.name, 

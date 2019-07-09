@@ -48,6 +48,26 @@ class PermissionRequest extends MainRequest
         ];
     }
 
+    public function _positionCreate()
+    {
+        $data = [
+            'name' => Request::json('name'),
+            'key' => Request::json('key'),
+        ];
+        $rules = [
+            'name'=> 'required',
+            'key'=> 'required',
+        ];
+        $messages = [];
+        
+        return [
+            'authorize'=> true,
+            'rules'=> $rules,
+            'messages'=> $messages,
+            'data'=> $data
+        ];
+    }
+
     public function _create()
     {
         $data = [

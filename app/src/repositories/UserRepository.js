@@ -47,6 +47,14 @@ export default {
         return Repository.post(`${resource}/permission/create`, {
             permission_id: input.permission_id,
             user_id: input.user_id,
+            project_id: input.project_id,
+        });
+    },
+    permissionDetail(user_id, project_id) {
+        return Repository.get(`${resource}/permission/detail/${user_id}`, {
+            params: {
+                project_id: project_id,
+            }
         });
     },
     async search(input) {

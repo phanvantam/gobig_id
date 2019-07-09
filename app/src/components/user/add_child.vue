@@ -66,17 +66,12 @@
 </template>
 
 <script>
-import UserRepository from '@/repositories/UserRepository'
+import UserRepository from '@/repositories/UserRepository';
 import VueSimpleSuggest from 'vue-simple-suggest';
 import 'vue-simple-suggest/dist/styles.css';
 
 export default {
     data: ()=> ({
-        data: {
-            fullname: null, 
-            email: null, 
-            password: null,	
-        },
         users_child: [],
         component: {
             vue_simple_suggest: {
@@ -140,7 +135,7 @@ export default {
             .then(response=> {
                 this.users_child = response;
             })
-        }
+        },
     }
 }
 </script>

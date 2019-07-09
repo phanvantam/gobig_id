@@ -31,6 +31,11 @@ export default new Router({
             component: () => import('@/components/permission/project/index')
         },
         {
+            path: '/phan-quyen/chuc-vu',
+            name: 'permissionPosition',
+            component: () => import('@/components/permission/position/index')
+        },
+        {
             path: '/dang-nhap',
             name: 'login',
             meta: {

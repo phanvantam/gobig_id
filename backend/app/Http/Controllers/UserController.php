@@ -71,9 +71,21 @@ class UserController extends Controller
         $request = [
             'permission_id'=> $this->request->json('permission_id'),
             'user_id'=> $this->request->json('user_id'),
+            'project_id'=> $this->request->json('project_id'),
         ];
+        $this->user->permissionRemoveByProjectAndUser($request['project_id'], $request['user_id']);
         $this->user->permissionAdd($request);
         return $this->response();
+    }
+
+    public function permissionDetail($user_id)
+    {
+        $request = [
+            'project_id'=> $this->request->query('project_id'),
+        ];
+        $result = $this->user->permissionGetByProjectAndUser($request['project_id'], $user_id);
+        $response = $result === null ? [] : $result->toArray();
+        return $this->response($response);
     }
 
     public function search()
@@ -90,34 +102,28 @@ class UserController extends Controller
     {
         $user = $this->user->getByCode(USER_CODE);
 
-        $result = $this->permission->getById($user->use_permission_id);
-
-        $modules = [
-            'code'=> [],
-            'list'=> []
-        ];
-        if($result->modules !== null) {
-            foreach($result->modules as $item) {
-                $modules['list'][] = [
-                    'name'=> $item->mod_name,
-                    'code'=> $item->mod_code
-                ];
-                $modules['code'][] = $item->mod_code;
+        $user->position;
+        $user->permission;
+        $user->children;
+        $user->permission->map(function($item) {
+            $item->project;
+            $result = $this->permission->getModuleCode($item->per_modules_id);
+            $modules = [
+                'code'=> [],
+                'list'=> []
+            ];
+            if($result !== null) {
+                foreach($result as $m_item) {
+                    $modules['list'][] = [
+                        'name'=> $m_item->mod_name,
+                        'code'=> $m_item->mod_code
+                    ];
+                    $modules['code'][] = $m_item->mod_code;
+                }
             }
-        }
-
-        $response = [
-            'fullname'=> $user->use_fullname,
-            'email'=> $user->use_email,
-            'code'=> $user->use_code,
-            'id'=> $user->use_id,
-            'permission'=> [
-                'title'=> $result->per_title,
-                'id'=> $result->per_id,
-            ],
-            'modules'=> $modules
-        ];
-        return $this->response($response);
+            $item->modules = $modules;
+        });
+        return $this->response($user);
     }
 
     public function child($user_id)

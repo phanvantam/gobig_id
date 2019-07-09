@@ -22,7 +22,11 @@ $router->group(['prefix' => 'v1'], function () use ($router) {
         $router->get('child/{user_id:\d*}', 'UserController@child');
         $router->post('create', 'UserController@create');
         $router->post('child/create', 'UserController@childCreate');
-        $router->post('permission/create', 'UserController@permissionCreate');
+        
+        $router->group(['prefix' => 'permission'], function () use ($router) {
+            $router->post('create', 'UserController@permissionCreate');
+            $router->get('detail/{user_id:\d*}', 'UserController@permissionDetail');
+        });
     });
 
     $router->group(['prefix' => 'auth'], function () use ($router) {
@@ -44,6 +48,11 @@ $router->group(['prefix' => 'v1'], function () use ($router) {
         $router->group(['prefix' => 'project'], function () use ($router) {
             $router->get('/', 'PermissionController@listProject');
             $router->post('create', 'PermissionController@createProject');
+        });
+        $router->group(['prefix' => 'position'], function () use ($router) {
+            $router->get('/', 'PermissionController@position');
+            $router->get('search', 'PermissionController@positionSearch');
+            $router->post('create', 'PermissionController@positionCreate');
         });
     });
 });

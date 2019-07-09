@@ -6,6 +6,7 @@ use App\Repositories\PermissionRepositoryInterface;
 use App\Models\Permission;
 use App\Models\Module;
 use App\Models\Project;
+use App\Models\Position;
 
 class PermissionRepository implements PermissionRepositoryInterface
 {
@@ -41,6 +42,30 @@ class PermissionRepository implements PermissionRepositoryInterface
         ];
         $record_id = Module::insertGetId($data);
         return $record_id;
+	}
+
+	public function positionCreate($input)
+	{
+		$data = [
+         'pos_name'=> $input['name'],
+         'pos_key'=> $input['key'],
+      ];
+      $record_id = Position::insertGetId($data);
+      return $record_id;
+	}
+
+	public function positionGetByFilter($params=[])
+	{
+		$query = new Position;
+		$result = $query->get();
+		return $result;
+	}
+
+	public function positionSearch($params=[])
+	{
+		$query = new Position;
+		$result = $query->get();
+		return $result;
 	}
 
 	public function createProject($input)

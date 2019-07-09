@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Repositories\UserRepositoryInterface;
 use App\Models\User;
 use App\Models\UserChild;
+use App\Models\UserPermission;
 
 class UserRepository implements UserRepositoryInterface
 {   
@@ -86,6 +87,22 @@ class UserRepository implements UserRepositoryInterface
 
     public function permissionAdd($input)
     {
-        User::where('use_id', $input['user_id'])->update(['use_permission_id'=> $input['permission_id']]);
+        $data = [
+            'usp_permission_id'=> $input['permission_id'],
+            'usp_project_id'=> $input['project_id'],
+            'usp_user_id'=> $input['user_id'],
+        ];
+        $record_id = UserPermission::insertGetId($data);
+        return $record_id;
+    }
+
+    public function permissionRemoveByProjectAndUser($project_id, $user_id)
+    {
+        UserPermission::where('usp_project_id', $project_id)->where('usp_user_id', $user_id)->delete();
+    }
+
+    public function permissionGetByProjectAndUser($project_id, $user_id)
+    {
+        return UserPermission::where('usp_project_id', $project_id)->where('usp_user_id', $user_id)->first();
     }
 }

@@ -1,5 +1,5 @@
 <template>
-	<div class="modal modal_sc1" id="user-add">
+	<div class="modal modal_sc1" id="project-add">
 	    <div class="modal-dialog">
 	        <div class="modal-content">
 	            <!-- Modal Header -->
@@ -7,28 +7,17 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h4 class="modal-title">Thêm mới người dùng</h4>
+	                <h4 class="modal-title">Thêm mới chức vụ</h4>
 	            </div>
 	            <!-- Modal body -->
 	            <div class="modal-body">
 	                <div class="form-group">
-	                    <label for="">Họ và tên:</label>
-	                    <input type="text" v-model="data.fullname" class="form-control">
+	                    <label for="">Tên:</label>
+	                    <input type="text" v-model="data.name" class="form-control">
 	                </div>
                     <div class="form-group">
-                        <label for="">Email:</label>
-                        <input type="email" v-model="data.email" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="">Mật khẩu:</label>
-                        <input type="password" v-model="data.password" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="">Chức vụ:</label>
-                        <select class="form-control" v-model="data.position_id">
-                            <option disabled="" value="null">-- Chọn chức vụ --</option>
-                            <option v-for="item in component.positions" :value="item.id">{{ item.name }}</option>
-                        </select>
+                        <label for="">Key:</label>
+                        <input type="text" v-model="data.key" class="form-control">
                     </div>
 	            </div>
 	            <!-- Modal footer -->
@@ -42,40 +31,25 @@
 </template>
 
 <script>
-import UserRepository from '@/repositories/UserRepository';
-import PermissionRepository from '@/repositories/PermissionRepository';
+import PermissionRepository from '@/repositories/PermissionRepository'
 
 export default {
     data: ()=> ({
         data: {
-            fullname: null, 
-            email: null, 
-            password: null,
-            position_id: null	
-        },
-        component: {
-            positions: []
+            name: null, 
+            key: null, 
         }
     }),
-    created() {
-        this.getData();
-    },
     methods: {
-        getData() {
-            PermissionRepository.positionSearch()
-            .then(response=> {
-                this.component.positions = response;
-            })
-        },
         submit() {
-        	UserRepository.add(this.data)
+        	PermissionRepository.positionAdd(this.data)
             .then(response=> {
                 switch(response.status) {
                     case 1: 
                         $(this.$el).find('.close-modal').click();
                         this.$emit('reload');
                         this.$notify({
-                            text: 'Tạo mới người dùng thành công',
+                            text: 'Thêm mới thành công',
                             type: 'success'
                         });
                     break;

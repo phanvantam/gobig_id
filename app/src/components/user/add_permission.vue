@@ -47,8 +47,9 @@
 </template>
 
 <script>
-import PermissionRepository from '@/repositories/PermissionRepository'
-import UserRepository from '@/repositories/UserRepository'
+import PermissionRepository from '@/repositories/PermissionRepository';
+import UserRepository from '@/repositories/UserRepository';
+import HelperIndex from '@/helper/index';
 
 export default {
     data: ()=> ({
@@ -62,11 +63,12 @@ export default {
         modules: []
     }),
     watch: {
-        'data.project_id': function(value) {
+        'data.project_id': async function(value) {
             if(value !== null) {
             	this.data.permission_id = null;
-               this.getPermission();
-               this.getModule();
+                await this.getPermission();
+                await this.getModule();
+                await this.getPermissionOld();
             }
         },
         'data.permission_id': function(value) {
@@ -86,7 +88,8 @@ export default {
     methods: {
         submit() {
         	let params = {
-        		permission_id: this.data.permission_id,
+                permission_id: this.data.permission_id,
+        		project_id: this.data.project_id,
         		user_id: this.user_id
         	};
         	UserRepository.permissionAdd(params)
@@ -109,6 +112,12 @@ export default {
                         });
                     break;
                 }
+            })
+        },
+        getPermissionOld() {
+            UserRepository.permissionDetail(this.user_id, this.data.project_id)
+            .then(response=> {
+                this.data.permission_id = HelperIndex.arrayGet(response, 'data.usp_permission_id', null);
             })
         },
         getProject() {

@@ -55,9 +55,11 @@ class UserRequest extends MainRequest
         $data = [
             'permission_id' => Request::json('permission_id'),
             'user_id' => Request::json('user_id'),
+            'project_id' => Request::json('project_id'),
         ];
         $rules = [
             'permission_id'=> 'required',
+            'project_id' => 'required',
             'user_id' => 'required',
         ];
         $messages = [];

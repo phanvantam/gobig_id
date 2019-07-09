@@ -3,6 +3,7 @@ const Modules = {
 	User: require('./User.js').default,
 	Module: require('./Module.js').default,
 	Project: require('./Project.js').default,
+	Position: require('./Position.js').default,
 	Permission: require('./Permission.js').default,
 };
 
