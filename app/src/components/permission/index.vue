@@ -1,5 +1,5 @@
 <template>
-  <div class="content-wrapper">
+  <div class="">
     <section class="content-header">
       <h1>
         Phân quyền

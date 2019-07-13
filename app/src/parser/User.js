@@ -5,4 +5,7 @@ export default [
 	{key: 'code',key_api: 'use_code|code',data_type: 'string'},
 	{key: 'created_at',key_api: 'use_created_at|usc_created_at',data_type: 'string'},
 	{key: 'updated_at',key_api: 'use_updated_at',data_type: 'string'},
+	{key: 'permission',key_api: 'permission',data_type: 'array',parser: 'Permission'},
+	{key: 'position',key_api: 'position',data_type: 'object',parser: 'Position'},
+	{key: 'children',key_api: 'children',data_type: 'array',parser: 'User'},
 ];

@@ -176,12 +176,6 @@ export default {
 		} 
 		return result;
 	},
-	saveAccessToken(value, exp=1) {
-		this.setCookie('ACCESS_TOKEN', value, exp);
-	},
-	getAccessToken() {
-		return this.getCookie('ACCESS_TOKEN');
-	},
 	// Hàm thiết lập Cookie
 	setCookie(cname, cvalue, exdays) {
 	    let d = new Date();

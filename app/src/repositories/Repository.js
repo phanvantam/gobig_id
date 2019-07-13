@@ -1,7 +1,7 @@
 import Axios from 'axios'
 import Router from '@/router/index'
 import Env from'@/config/env.js';
-import HelperIndex from '@/helper/index';
+import HelperUser from '@/helper/user';
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
  
@@ -16,13 +16,13 @@ const instance = Axios.create({
 });
 
 instance.interceptors.request.use(function (config) {
-	// NProgress.start();
-	config.headers.Authorization = "Bearer "+ HelperIndex.getAccessToken();
+	NProgress.start();
+	config.headers.Authorization = "Bearer "+ HelperUser.getAccessToken();
    return config;
 });
 
 instance.interceptors.response.use(function(response) {
-    // NProgress.done();
+   NProgress.done();
 	let result = {
 		status: 1,
 		data: []
@@ -36,12 +36,9 @@ instance.interceptors.response.use(function(response) {
 		}
 	}
 	return result;
-}, function(error) {
-	switch(error.response.status) {
-		case 401: 
-			Router.push({name: 'login'});
-		break;
-	}
+}, e=> {
+	NProgress.done();
+	return Promise.reject(e);
 });
 
 export default instance;

@@ -4,12 +4,14 @@ import Vue from 'vue';
 import App from '@/App';
 import router from '@/router/index.js';
 import vue_meta from 'vue-meta';
-import { store } from '@/store/index.js';
+import store from '@/store/index.js';
 import Notifications from 'vue-notification';
+import Helper from '@/helper/loader.js';
 
 Vue.config.productionTip = false
 
 Vue.use(vue_meta);
+Vue.use(Helper);
 Vue.use(Notifications);
 
 /* eslint-disable no-new */

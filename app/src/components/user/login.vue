@@ -38,7 +38,6 @@
 
 <script>
 import UserRepository from '@/repositories/UserRepository'
-import HelperIndex from '@/helper/index';
 
 export default {
   data: () => ({
@@ -47,17 +46,13 @@ export default {
     	password: null,
     }
   }),
-  components: {},
-  watch: {},
-  created() {
-  },
   methods: {
     submit() {
       UserRepository.login(this.data)
       .then(response=> {
         switch(response.status) {
             case 1: 
-                HelperIndex.saveAccessToken(response.data.access_token, response.data.exp);
+                this.$helper.user.saveAccessToken(response.data.access_token, response.data.exp);
                 this.$notify({
                     text: 'Đăng nhập thành công',
                     type: 'success'

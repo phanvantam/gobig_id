@@ -1,4 +1,3 @@
-
 import Vue from 'vue';
 import Vuex from 'vuex';
 
@@ -28,7 +27,7 @@ const actions = {
 	}
 };
 
-export const store = new Vuex.Store({
+export default new Vuex.Store({
 	state: state,
 	getters: getters,
 	mutations: mutations,
