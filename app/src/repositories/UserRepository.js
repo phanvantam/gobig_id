@@ -80,7 +80,7 @@ export default {
         	email: input.email, 
         	password: input.password, 
         	fullname: input.fullname,
-            position_id; input.position_id
+            position_id: input.position_id
         });
     },
 }
