@@ -48,6 +48,7 @@ class UserController extends Controller
             'fullname'=> $this->request->json('fullname'),
             'email'=> $this->request->json('email'),
             'password'=> $this->request->json('password'),
+            'position_id'=> $this->request->json('position_id'),
             'code'=> $this->user->makeUniqueCode(),
             'salt'=> $this->user->makeSaltCode(),
         ];

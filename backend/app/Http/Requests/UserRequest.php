@@ -14,11 +14,13 @@ class UserRequest extends MainRequest
             'fullname' => Request::json('fullname'),
             'email' => Request::json('email'),
             'password' => Request::json('password'),
+            'position_id' => Request::json('position_id'),
         ];
         $rules = [
             'fullname'=> 'required',
             'email' => 'required',
             'password' => 'required',
+            'position_id' => 'required',
         ];
         $messages = [];
         

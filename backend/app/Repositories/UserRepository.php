@@ -77,6 +77,7 @@ class UserRepository implements UserRepositoryInterface
             'use_fullname'=> $input['fullname'],
             'use_email'=> $input['email'],
             'use_salt'=> $input['salt'],
+            'use_position_id'=> $input['position_id'],
             'use_code'=> $input['code'],
             'use_password_code'=> $input['password_code'],
             'use_salt'=> $input['salt'],

@@ -79,7 +79,8 @@ export default {
         return Repository.post(`${resource}/create`, {
         	email: input.email, 
         	password: input.password, 
-        	fullname: input.fullname
+        	fullname: input.fullname,
+            position_id; input.position_id
         });
     },
 }
