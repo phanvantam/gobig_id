@@ -42,7 +42,7 @@ class PermissionController extends Controller
     public function getById($id)
     {
         $result = $this->permission->getById($id);
-
+        $result->project;
         return $this->response($result);
     }
 
@@ -50,12 +50,22 @@ class PermissionController extends Controller
     {
         $request = [
             'title'=> $this->request->json('title'),
-            'description'=> $this->request->json('description'),
             'project_id'=> $this->request->json('project_id'),
             'modules_id'=> $this->request->json('modules_id'),
         ];
         $record_id = $this->permission->create($request);
         return $this->response($record_id);
+    }
+
+    public function update($id)
+    {
+        $request = [
+            'title'=> $this->request->json('title'),
+            'project_id'=> $this->request->json('project_id'),
+            'modules_id'=> $this->request->json('modules_id'),
+        ];
+        $this->permission->update($id, $request);
+        return $this->response();
     }
 
     public function createModule()

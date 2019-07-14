@@ -72,7 +72,6 @@ class PermissionRequest extends MainRequest
     {
         $data = [
             'title' => Request::json('title'),
-            'description' => Request::json('description'),
             'modules_id' => Request::json('modules_id'),
             'project_id' => Request::json('project_id'),
         ];
@@ -89,5 +88,10 @@ class PermissionRequest extends MainRequest
             'messages'=> $messages,
             'data'=> $data
         ];
+    }
+
+    public function _update()
+    {
+        return $this->_create();
     }
 }

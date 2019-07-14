@@ -46,12 +46,10 @@ export default {
 					let tmp = null;
 					switch(item.data_type) {
 						case 'object': 
-						tmp = this.run({data: data[key], module: item.parser, type: 'object'})
-							// tmp = 'parser' in item ? this.run({data: data[key], module: item.parser, type: 'object'}) : data[key];
+							tmp = 'parser' in item ? this.run({data: data[key], module: item.parser, type: 'object'}) : data[key];
 						break;
 						case 'array':
-							// tmp = 'parser' in item ? this.run({data: data[key], module: item.parser}) : data[key];
-							tmp = this.run({data: data[key], module: item.parser})
+							tmp = 'parser' in item ? this.run({data: data[key], module: item.parser}) : data[key];
 						break;
 						case 'number': 
 							tmp = Number(data[key]);

@@ -41,6 +41,7 @@ $router->group(['prefix' => 'v1'], function () use ($router) {
         $router->get('getByProject/{project_id:\d*}', 'PermissionController@getByProject');
         $router->get('{id:\d*}', 'PermissionController@getById');
         $router->post('create', 'PermissionController@create');
+        $router->put('update/{id:\d*}', 'PermissionController@update');
         $router->group(['prefix' => 'module'], function () use ($router) {
             $router->get('/{project_id:\d*}', 'PermissionController@listModule');
             $router->post('create', 'PermissionController@createModule');

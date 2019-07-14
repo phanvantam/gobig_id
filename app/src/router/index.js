@@ -64,6 +64,7 @@ ROUTER.beforeEach((to, from, next) => {
                 fullname: response.fullname,
             }});
             Store.dispatch('setData', {key: 'user/permission', value: response.permission});
+            Store.dispatch('setData', {key: 'user/is_admin', value: response.position.key === 'ADMIN'});
             const MODULE_LABEL = HelperIndex.arrayGet(to, 'meta.module');
             if(MODULE_LABEL !== null) {
                 const ACCESS = HelperUser.permission(MODULE_LABEL);

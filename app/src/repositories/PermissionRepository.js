@@ -53,6 +53,13 @@ export default {
             modules_id: input.modules_id
         });
     },
+    update(id, input) {
+        return Repository.put(`${resource}/update/${id}`, {
+            title: input.name, 
+            project_id: input.project_id, 
+            modules_id: input.modules_id
+        });
+    },
     async position() {
         const result = await Repository.get(`${resource}/position`);
         const response = Parser.run({

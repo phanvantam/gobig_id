@@ -25,11 +25,22 @@ class PermissionRepository implements PermissionRepositoryInterface
             'per_title'=> $input['title'],
             'per_modules_id'=> $input['modules_id'],
             'per_project_id'=> $input['project_id'],
-            'per_description'=> $input['description'],
         ];
         $record_id = Permission::insertGetId($data);
         return $record_id;
 	}
+
+	public function update($id, $input)
+	{
+		$data = [
+            'per_title'=> $input['title'],
+            'per_modules_id'=> $input['modules_id'],
+            'per_project_id'=> $input['project_id'],
+        ];
+      Permission::where('per_id', $id)->update($data);
+        // return $record_id;
+	}
+
 
 
 	public function createModule($input)

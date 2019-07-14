@@ -43,7 +43,11 @@
                         <td>{{ item.title }}</td>
                         <td>{{ item.project.name }}</td>
                         <td>{{ item.created_at }}</td>
-                        <td></td>
+                        <td>
+                          <span class="label label-primary" data-toggle="modal" data-target="#permission-edit" @click="component.permission_edit.id = item.id">
+                            <i class="fa fa-edit"></i> Sửa
+                          </span>
+                        </td>
                     </tr>
                 </tbody>
               </table>
@@ -57,6 +61,10 @@
     <permissionAdd 
       @reload="getData"
     />
+    <permissionEdit 
+      @reload="getData"
+      :id.sync="component.permission_edit.id"
+    />
   </div>
 </template>
 
@@ -65,10 +73,16 @@ import PermissionRepository from '@/repositories/PermissionRepository'
 
 export default {
   data: () => ({
-    data : []
+    data : [],
+    component: {
+      permission_edit: {
+        id: 0
+      }
+    }
   }),
   components: {
-    permissionAdd: ()=> import('./add')
+    permissionAdd: ()=> import('./add'),
+    permissionEdit: ()=> import('./edit')
   },
   watch: {},
   created() {
@@ -85,7 +99,3 @@ export default {
 }
 
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-</style>

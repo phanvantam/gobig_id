@@ -8,7 +8,7 @@ import store from '@/store/index.js';
 import Notifications from 'vue-notification';
 import Helper from '@/helper/loader.js';
 
-Vue.config.productionTip = false
+// Vue.config.productionTip = false
 
 Vue.use(vue_meta);
 Vue.use(Helper);
