@@ -36,6 +36,9 @@
                                 </li>
                                 <!-- Menu Footer-->
                                 <li class="user-footer">
+                                    <div class="pull-left">
+                                        <router-link :to="{name:'userProfile'}" class="btn btn-default btn-flat">Profile</router-link>
+                                    </div>
                                     <div class="pull-right">
                                         <a href="javascript:void(0);" @click="logout" class="btn btn-default btn-flat">Đăng xuất</a>
                                     </div>

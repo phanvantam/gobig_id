@@ -134,32 +134,37 @@ class UserController extends Controller
         return $this->response($response);
     }
 
-    // public function info()
-    // {
-    //     $user = $this->user->getByCode(USER_CODE);
-    //     $result = $this->permission->getById($user->use_permission_id);
+    public function profileUpdate()
+    {
+        $user = $this->user->getByCode(USER_CODE);
+        $request = [
+            'fullname'=> $this->request->json('fullname'),
+        ];
+        $this->user->updateProfileById($user->use_id, $request);
+        return $this->response();
+    }
 
-    //     $modules = [
-    //         'code'=> [],
-    //         'list'=> []
-    //     ];
-    //     if($result->modules !== null) {
-    //         foreach($result->modules as $item) {
-    //             $modules['list'][] = [
-    //                 'name'=> $item->mod_name,
-    //                 'code'=> $item->mod_code
-    //             ];
-    //             $modules['code'][] = $item->mod_code;
-    //         }
-    //     }
+    public function profileUpdatePassword()
+    {
+        $user = $this->user->getByCode(USER_CODE);
+        $request = [
+            'password'=> $this->request->json('password'),
+            'salt'=> $this->user->makeSaltCode(),
+        ];
+        $request['password_code'] = $this->user->makePasswordCode($request['password'], $request['salt']);
+        $this->user->updatePasswordById($user->use_id, $request);
+        return $this->response();
+    }
 
-    //     $response = [
-    //         'permission'=> [
-    //             'title'=> $result->per_title,
-    //             'id'=> $result->per_id,
-    //         ],
-    //         'modules'=> $modules
-    //     ];
-    //     return $this->response($response);
-    // }
+    public function profile()
+    {
+        $user = $this->user->getByCode(USER_CODE);
+
+        $user->position;
+        $user->permission;
+        $user->permission->map(function($item) {
+            $item->project;
+        });
+        return $this->response($user);
+    }
 }

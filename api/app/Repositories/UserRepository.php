@@ -76,7 +76,6 @@ class UserRepository implements UserRepositoryInterface
         $data = [
             'use_fullname'=> $input['fullname'],
             'use_email'=> $input['email'],
-            'use_salt'=> $input['salt'],
             'use_position_id'=> $input['position_id'],
             'use_code'=> $input['code'],
             'use_password_code'=> $input['password_code'],
@@ -85,6 +84,24 @@ class UserRepository implements UserRepositoryInterface
         $record_id = User::insertGetId($data);
         return $record_id;
     }
+
+    public function updateProfileById($id, $input)
+    {
+        $data = [
+            'use_fullname'=> $input['fullname'],
+        ];
+        User::where('use_id', $id)->update($data);
+    }
+
+    public function updatePasswordById($id, $input)
+    {
+        $data = [
+            'use_salt'=> $input['salt'],
+            'use_password_code'=> $input['password_code'],
+        ];
+        User::where('use_id', $id)->update($data);
+    }
+
 
     public function permissionAdd($input)
     {

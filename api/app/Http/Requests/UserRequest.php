@@ -32,6 +32,46 @@ class UserRequest extends MainRequest
         ];
     }
 
+    public function _profileUpdate()
+    {
+        $data = [
+            'fullname' => Request::json('fullname'),
+        ];
+        $rules = [
+            'fullname'=> 'required',
+        ];
+        $messages = [];
+        
+        return [
+            'authorize'=> true,
+            'rules'=> $rules,
+            'messages'=> $messages,
+            'data'=> $data
+        ];
+    }
+
+    public function _profileUpdatePassword()
+    {
+        $data = [
+            'password' => Request::json('password'),
+            'password_old' => Request::json('password_old'),
+            'password_confirm' => Request::json('password_confirm'),
+        ];
+        $rules = [
+            'password'=> 'required',
+            'password_old'=> 'required',
+            'password_confirm'=> 'required',
+        ];
+        $messages = [];
+        
+        return [
+            'authorize'=> true,
+            'rules'=> $rules,
+            'messages'=> $messages,
+            'data'=> $data
+        ];
+    }
+
     public function _childCreate()
     {
         $data = [

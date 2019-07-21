@@ -83,4 +83,25 @@ export default {
             position_id: input.position_id
         });
     },
+    updateProfile(input) {
+        return Repository.put(`${resource}/profile/update`, {
+            fullname: input.fullname,
+        });
+    },
+    profileUpdatePassword(input) {
+        return Repository.put(`${resource}/profile/update/password`, {
+            password: input.password,
+            password_old: input.password_old,
+            password_confirm: input.password_confirm,
+        });
+    },
+    async profile() {
+        const result = await Repository.get(`${resource}/profile`);
+        const response = Parser.run({
+            module: 'User',
+            data: HelperIndex.arrayGet(result, 'data', {}),
+            type: 'object'
+        })
+        return response;
+    },
 }

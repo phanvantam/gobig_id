@@ -20,6 +20,11 @@ const ROUTER = new Router({
             component: () => import('@/components/user/index')
         },
         {
+            path: '/nguoi-dung/profile',
+            name: 'userProfile',
+            component: () => import('@/components/user/profile')
+        },
+        {
             path: '/phan-quyen/module/:project_id',
             name: 'permissionModule',
             component: () => import('@/components/permission/module/index')

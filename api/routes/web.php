@@ -27,6 +27,15 @@ $router->group(['prefix' => 'v1'], function () use ($router) {
             $router->post('create', 'UserController@permissionCreate');
             $router->get('detail/{user_id:\d*}', 'UserController@permissionDetail');
         });
+
+        $router->group(['prefix' => 'profile'], function () use ($router) {
+            $router->get('/', 'UserController@profile');
+
+            $router->group(['prefix' => 'update'], function () use ($router) {
+                $router->put('/', 'UserController@profileUpdate');
+                $router->put('password', 'UserController@profileUpdatePassword');
+            });
+        });
     });
 
     $router->group(['prefix' => 'auth'], function () use ($router) {
