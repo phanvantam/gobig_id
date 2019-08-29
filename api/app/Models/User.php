@@ -12,6 +12,11 @@ class User extends Model {
 	const CREATED_AT = 'use_created_at';
 	const UPDATED_AT = 'use_updated_at';
 
+    protected $casts = [
+        'use_created_at' => 'datetime:H:i d/m/Y',
+        'use_updated_at' => 'datetime:H:i d/m/Y',
+    ];
+    
 	public function position()
 	{
 		return $this->belongsTo(

@@ -4,9 +4,9 @@
             <!-- Logo -->
             <a href="/index2.html" class="logo">
                 <!-- mini logo for sidebar mini 50x50 pixels -->
-                <span class="logo-mini"><b>A</b>LT</span>
+                <span class="logo-mini"><b>ID</b></span>
                 <!-- logo for regular state and mobile devices -->
-                <span class="logo-lg"><b>Admin</b>LTE</span>
+                <span class="logo-lg"><b>ID</b>Gobig</span>
             </a>
             <!-- Header Navbar: style can be found in header.less -->
             <nav class="navbar navbar-static-top">
@@ -23,15 +23,16 @@
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <img src="/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
-                            <span class="hidden-xs">{{ $helper.arrayGet(user_info, 'fullname') }}</span>
+                            <span class="hidden-xs">{{ user_info.fullname }}</span>
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- User image -->
                                 <li class="user-header">
                                     <img src="/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
                                     <p>
-                                        {{ $helper.arrayGet(user_info, 'email') }}
-                                        <small>Member since Nov. 2012</small>
+                                        {{ user_info.fullname }}
+                                        <small>Email: {{ user_info.email }}</small>
+                                        <small>Chức vụ: {{ user_position.name }}</small>
                                     </p>
                                 </li>
                                 <!-- Menu Footer-->
@@ -130,7 +131,10 @@ export default {
         // },
         user_info() {
             return this.$store.getters.getData('user/info', {});
-        }
+        },
+        user_position() {
+            return this.$store.getters.getData('user/position', {});
+        },
     },
     methods: {
         logout() {

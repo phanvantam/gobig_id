@@ -5,11 +5,6 @@
         Người dùng
         <small>Danh sách</small>
       </h1>
-      <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="#">Tables</a></li>
-        <li class="active">Simple</li>
-      </ol>
     </section>
     <!-- Main content -->
     <section class="content">
@@ -17,12 +12,6 @@
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header clearfix">
-              <div class="input-group input-group-sm pull-left" style="width: 150px;">
-                  <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
-                  <div class="input-group-btn">
-                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                  </div>
-                </div>
                 <button type="button" class="btn btn-info btn-sm pull-right" data-toggle="modal" data-target="#user-add">Thêm mới</button>
             </div>
             <!-- /.box-header -->
@@ -38,8 +27,8 @@
                   </tr>
                 </thead>
                 <tbody class="table-product-body">
-                  <tr v-for="item in data">
-                    <td></td>
+                  <tr v-for="(item, stt) in data">
+                    <td>{{ stt+1 }}</td>
                     <td>{{ item.fullname }}</td>
                     <td>{{ item.email }}</td>
                     <td>{{ item.created_at }}</td>
@@ -49,6 +38,9 @@
                       </span>
                       <span class="label label-primary" data-toggle="modal" data-target="#user-add-permission" @click="component.user_add_permission.user_id = item.id">
                         <i class="fa fa-get-pocket"></i> Quyền
+                      </span>
+                      <span class="label label-primary" data-toggle="modal" data-target="#user-edit" @click="component.user_edit.user_id = item.id">
+                        <i class="fa fa-edit"></i> Cập nhật
                       </span>
                     </td>
                   </tr>
@@ -61,11 +53,17 @@
       </div>
     </section>
     <!-- /.content -->
-    <userAdd />
+    <userAdd @reload="getData" />
     <userAddChild 
+      @reload="getData"
       :user_id="component.user_add_child.user_id"
     />
-    <userAddPermission 
+    <userEdit
+      @reload="getData"
+      :user_id="component.user_edit.user_id"
+    />
+    <userAddPermission
+      @reload="getData"
       :user_id="component.user_add_permission.user_id"
     />
   </div>
@@ -74,6 +72,9 @@
 import UserRepository from '@/repositories/UserRepository'
 
 export default {
+  metaInfo: {
+    title: 'Thành viên - Danh sách | ID Gobig',
+  },
   data: () => ({
     data : [],
     component: {
@@ -82,11 +83,15 @@ export default {
       },
       user_add_permission: {
         user_id: null
+      },
+      user_edit: {
+        user_id: 0
       }
     }
   }),
   components: {
     userAdd: ()=> import('./add'),
+    userEdit: ()=> import('./edit'),
     userAddChild: ()=> import('./add_child'),
     userAddPermission: ()=> import('./add_permission'),
   },

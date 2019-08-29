@@ -17,10 +17,12 @@ $router->group(['prefix' => 'v1'], function () use ($router) {
         'middleware'=> 'auth'
     ], function () use ($router) {
         $router->get('/', 'UserController@index');
+        $router->get('detail/{user_id:\d*}', 'UserController@detail');
         $router->get('info', 'UserController@info');
         $router->get('search', 'UserController@search');
         $router->get('child/{user_id:\d*}', 'UserController@child');
         $router->post('create', 'UserController@create');
+        $router->put('update/{user_id:\d*}', 'UserController@update');
         $router->post('child/create', 'UserController@childCreate');
         
         $router->group(['prefix' => 'permission'], function () use ($router) {

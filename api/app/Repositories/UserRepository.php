@@ -37,6 +37,12 @@ class UserRepository implements UserRepositoryInterface
         return $result;
     }
 
+    public function getById($value)
+    {
+        $result = User::where('use_id', $value)->first();
+        return $result;
+    }
+
     public function getChild($value)
     {
         $result = UserChild::where('usc_parent_id', $value)->leftJoin('users', 'use_id', 'usc_child_id')->get();
@@ -83,6 +89,20 @@ class UserRepository implements UserRepositoryInterface
         ];
         $record_id = User::insertGetId($data);
         return $record_id;
+    }
+
+    public function updateById($id, $input)
+    {
+        $data = [
+            'use_fullname'=> $input['fullname'],
+            'use_email'=> $input['email'],
+            'use_position_id'=> $input['position_id'],
+        ];
+        if(!empty($input['password_code'])) {
+            $data['use_password_code'] = $input['password_code'];
+            $data['use_salt'] = $input['salt'];
+        }
+        User::where('use_id', $id)->update($data);
     }
 
     public function updateProfileById($id, $input)

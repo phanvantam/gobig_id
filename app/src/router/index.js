@@ -53,6 +53,15 @@ const ROUTER = new Router({
             },
             component: () => import('@/components/user/login')
         },
+        {
+            path: '/404',
+            name: 'error_404',
+            component: () => import('@/components/error/404.vue')
+        },
+        {
+            path: '*',
+            redirect: {name: 'error_404'}
+        },
 	]
 });
 
@@ -69,6 +78,7 @@ ROUTER.beforeEach((to, from, next) => {
                 fullname: response.fullname,
             }});
             Store.dispatch('setData', {key: 'user/permission', value: response.permission});
+            Store.dispatch('setData', {key: 'user/position', value: response.position});
             Store.dispatch('setData', {key: 'user/is_admin', value: response.position.key === 'ADMIN'});
             const MODULE_LABEL = HelperIndex.arrayGet(to, 'meta.module');
             if(MODULE_LABEL !== null) {

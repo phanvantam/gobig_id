@@ -5,11 +5,6 @@
         Người dùng
         <small>Profile</small>
       </h1>
-      <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="#">Tables</a></li>
-        <li class="active">Simple</li>
-      </ol>
     </section>
     <!-- Main content -->
     <section class="content">
@@ -56,6 +51,9 @@ import UserRepository from '@/repositories/UserRepository'
 import PermissionRepository from '@/repositories/PermissionRepository'
 
 export default {
+  metaInfo: {
+    title: 'Thành viên - Profile | ID Gobig',
+  },
   data: () => ({
     data : {
       fullname: null,

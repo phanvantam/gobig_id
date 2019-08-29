@@ -5,11 +5,6 @@
         Chức vụ
         <small>Danh sách</small>
       </h1>
-      <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="#">Tables</a></li>
-        <li class="active">Simple</li>
-      </ol>
     </section>
     <!-- Main content -->
     <section class="content">
@@ -62,6 +57,9 @@
 import PermissionRepository from '@/repositories/PermissionRepository'
 
 export default {
+  metaInfo: {
+    title: 'Chức vụ - Danh sách | ID Gobig',
+  },
   data: () => ({
     data : []
   }),

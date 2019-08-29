@@ -21,6 +21,7 @@
                     </div>
                     <div class="form-group">
                         <label for="">Mật khẩu:</label>
+                        <span class="help-block">*Tối thiểu tám ký tự, ít nhất một chữ cái và một số</span>
                         <input type="password" v-model="data.password" class="form-control">
                     </div>
                     <div class="form-group">

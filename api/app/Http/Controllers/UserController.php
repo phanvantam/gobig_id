@@ -57,6 +57,22 @@ class UserController extends Controller
         return $this->response($record_id);
     }
 
+    public function update($user_id)
+    {
+        $request = [
+            'fullname'=> $this->request->json('fullname'),
+            'email'=> $this->request->json('email'),
+            'password'=> $this->request->json('password'),
+            'position_id'=> $this->request->json('position_id'),
+            'salt'=> $this->user->makeSaltCode(),
+        ];
+        if(!empty($request['password'])) {
+            $request['password_code'] = $this->user->makePasswordCode($request['password'], $request['salt']);
+        }
+        $this->user->updateById($user_id, $request);
+        return $this->response();
+    }
+
     public function childCreate()
     {
         $request = [
@@ -124,6 +140,36 @@ class UserController extends Controller
             }
             $item->modules = $modules;
         });
+        return $this->response($user);
+    }
+
+    public function detail($user_id)
+    {
+        $user = $this->user->getById($user_id);
+        if($user !== null) {
+            $user->position;
+            $user->permission;
+            $user->children;
+            $user->permission->map(function($item) {
+                $item->project;
+                $result = $this->permission->getModuleCode($item->per_modules_id);
+                $modules = [
+                    'code'=> [],
+                    'list'=> []
+                ];
+                if($result !== null) {
+                    foreach($result as $m_item) {
+                        $modules['list'][] = [
+                            'name'=> $m_item->mod_name,
+                            'code'=> $m_item->mod_code
+                        ];
+                        $modules['code'][] = $m_item->mod_code;
+                    }
+                }
+                $item->modules = $modules;
+            });
+        }
+        
         return $this->response($user);
     }
 

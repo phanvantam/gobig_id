@@ -29,6 +29,15 @@ export default {
         })
         return response;
     },
+    async getDetail(id) {
+        const result = await Repository.get(`${resource}/detail/${id}`);
+        const response = Parser.run({
+            module: 'User',
+            data: HelperIndex.arrayGet(result, 'data', {}),
+            type: 'object'
+        })
+        return response;
+    },
     async getChild(user_id) {
         const result = await Repository.get(`${resource}/child/${user_id}`);
         const response = Parser.run({
@@ -80,6 +89,14 @@ export default {
         	email: input.email, 
         	password: input.password, 
         	fullname: input.fullname,
+            position_id: input.position_id
+        });
+    },
+    edit(id, input) {
+        return Repository.put(`${resource}/update/${id}`, {
+            email: input.email, 
+            password: input.password, 
+            fullname: input.fullname,
             position_id: input.position_id
         });
     },
