@@ -6,7 +6,12 @@ const resource = '/v1/user';
 
 export default {
     async getByFilter(input) {
-        const result = await Repository.get(resource);
+        const result = await Repository.get(resource, {
+            params: {
+                page: input.page,
+                per: input.page_per,
+            }
+        });
 		const response = {
 			users: Parser.run({
 				module: 'User',
@@ -38,18 +43,13 @@ export default {
         })
         return response;
     },
-    async getChild(user_id) {
-        const result = await Repository.get(`${resource}/child/${user_id}`);
-        const response = Parser.run({
+    async master(position_id) {
+        const result = await Repository.get(`${resource}/master`, {
+            params: {position_id: position_id}
+        });
+        return Parser.run({
             module: 'User',
-            data: HelperIndex.arrayGet(result, 'data', []),
-        })
-        return response;
-    },
-    childAdd(input) {
-        return Repository.post(`${resource}/child/create`, {
-            parent_id: input.parent_id,
-            child_id: input.child_id,
+            data: HelperIndex.arrayGet(result, 'data', []), 
         });
     },
     permissionAdd(input) {
@@ -89,15 +89,28 @@ export default {
         	email: input.email, 
         	password: input.password, 
         	fullname: input.fullname,
-            position_id: input.position_id
+            position_id: input.position_id,
+            master_id: input.master_id,
         });
+    },
+    async getChild(user_id) {
+        const result = await Repository.get(`${resource}/child/${user_id}`);
+        const response = Parser.run({
+            module: 'User',
+            data: HelperIndex.arrayGet(result, 'data', []),
+        })
+        return response;
+    },
+    childRemove(id) {
+        return Repository.delete(`${resource}/child/remove/${id}`);
     },
     edit(id, input) {
         return Repository.put(`${resource}/update/${id}`, {
             email: input.email, 
             password: input.password, 
             fullname: input.fullname,
-            position_id: input.position_id
+            position_id: input.position_id,
+            master_id: input.master_id,
         });
     },
     updateProfile(input) {

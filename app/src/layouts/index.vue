@@ -67,7 +67,7 @@
                 <!-- sidebar menu: : style can be found in sidebar.less -->
                 <ul class="sidebar-menu" data-widget="tree">
                     <li class="header">MAIN NAVIGATION</li>
-                    <li class="treeview">
+                    <li class="treeview" v-if="$helper.user.permission('user.index|user.manager')">
                         <a href="#">
                             <i class="fa fa-dashboard"></i>
                             <span>Người dùng</span>
@@ -79,20 +79,20 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="treeview">
+                    <li class="treeview" v-if="$helper.user.permission('permission.index|permission.manager') || $helper.user.positionCheck('IT')">
                         <a href="#">
                             <i class="fa fa-dashboard"></i>
                             <span>Phân quyền</span>
                             <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                         </a>
                         <ul class="treeview-menu">
-                            <li>
+                            <li v-if="$helper.user.permission('permission.index|permission.manager')">
                                 <router-link :to="{name:'permission'}"><i class="fa fa-circle-o"></i>Danh sách quyền</router-link>
                             </li>
-                            <li>
+                            <li v-if="$helper.user.positionCheck('IT')">
                                 <router-link :to="{name:'permissionProject'}"><i class="fa fa-circle-o"></i>Dự án</router-link>
                             </li>
-                            <li>
+                            <li v-if="$helper.user.positionCheck('IT')">
                                 <router-link :to="{name:'permissionPosition'}"><i class="fa fa-circle-o"></i>Chức vụ</router-link>
                             </li>
                         </ul>

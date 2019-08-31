@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Repositories\UserRepositoryInterface;
+use App\Models\Position;
 use App\Models\User;
 use App\Models\UserChild;
 use App\Models\UserPermission;
@@ -49,6 +50,16 @@ class UserRepository implements UserRepositoryInterface
         return $result;
     }
 
+    public function childRemove($value)
+    {
+        UserChild::where('usc_id', $value)->delete();
+    }
+
+    public function removeChildByChildId($value)
+    {
+        UserChild::where('usc_child_id', $value)->delete();
+    }
+
     public function childCreate($input)
     {
         $data = [
@@ -91,6 +102,19 @@ class UserRepository implements UserRepositoryInterface
         return $record_id;
     }
 
+    public function master($position_id) {
+        $result = User::whereIn('use_position_id', function($query) use($position_id) {
+            $query->select('pos_id')
+            ->from(with(new Position)->getTable())
+            ->where('pos_level', '<', function($query) use($position_id) {
+                $query->select('pos_level')
+                ->from(with(new Position)->getTable())
+                ->where('pos_id', $position_id);
+            });
+        })->with('position')->get();
+        return $result;
+    }
+   
     public function updateById($id, $input)
     {
         $data = [

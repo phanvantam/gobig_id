@@ -24,23 +24,33 @@
             <div class="box-body table-responsive">
               <table class="table table-hover">
                <thead>
-                                    <tr>
-                                      <th>STT</th>
-                                      <th>Code</th>
-                                      <th>Tên</th>
-                                      <th>Ngày tạo</th>
-                                      <th>Tác vụ</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="table-product-body">
-                                    <tr v-for="item in data">
-                                        <td></td>
-                                        <td>{{ item.code }}</td>
-                                        <td>{{ item.name }}</td>
-                                        <td>{{ item.created_at }}</td>
-                                        <td></td>
-                                    </tr>
-                                </tbody>
+                  <tr>
+                    <th>STT</th>
+                    <th>Code</th>
+                    <th>Tên</th>
+                    <th>Ngày tạo</th>
+                    <th>Tác vụ</th>
+                  </tr>
+              </thead>
+              <tbody class="table-product-body">
+                <template v-for="(item, stt) in data">
+                  <tr>
+                      <td>{{ stt+1 }}</td>
+                      <td>{{ item.code }}</td>
+                      <td>{{ item.name }}</td>
+                      <td>{{ item.created_at }}</td>
+                      <td></td>
+                  </tr>
+                  <tr v-for="(item, stt_2) in item.children">
+                    <td>{{ stt+stt_2+1 }}</td>
+                    <td>{{ item.code }}</td>
+                    <td>-- {{ item.name }}</td>
+                    <td>{{ item.created_at }}</td>
+                    <td></td>
+                  </tr>
+                </template>
+                  
+              </tbody>
               </table>
             </div>
             <!-- /.box-body -->
@@ -72,7 +82,7 @@ export default {
   },
   watch: {},
   created() {
-    this.project_id = this.$route.params.project_id;
+    this.project_id = parseInt(this.$route.params.project_id);
     this.getData();
   },
   methods: {
@@ -86,7 +96,3 @@ export default {
 }
 
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-</style>

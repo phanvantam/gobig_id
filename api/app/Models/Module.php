@@ -16,4 +16,13 @@ class Module extends Model {
 		'mod_created_at' => 'datetime:H:i d/m/Y',
 		'mod_updated_at' => 'datetime:H:i d/m/Y',
 	];
+
+	public function children()
+    {
+        return $this->hasMany(
+            'App\Models\Module',
+            'mod_parent_id',
+            'mod_id',
+        );
+    }
 }

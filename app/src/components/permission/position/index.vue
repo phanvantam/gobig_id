@@ -24,23 +24,25 @@
             <div class="box-body table-responsive">
               <table class="table table-hover">
                 <thead>
-                                    <tr>
-                                      <th>STT</th>
-                                      <th>Tên</th>
-                                      <th>Key</th>
-                                      <th>Ngày tạo</th>
-                                      <th>Tác vụ</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="table-product-body">
-                                    <tr v-for="(item, stt) in data">
-                                        <td>{{ stt+1 }}</td>
-                                        <td>{{ item.name }}</td>
-                                        <td>{{ item.key }}</td>
-                                        <td>{{ item.created_at }}</td>
-                                        <td></td>
-                                    </tr>
-                                </tbody>
+                  <tr>
+                    <th>STT</th>
+                    <th>Tên</th>
+                    <th>Key</th>
+                    <th>Level</th>
+                    <th>Ngày tạo</th>
+                    <th>Tác vụ</th>
+                  </tr>
+              </thead>
+              <tbody class="table-product-body">
+                  <tr v-for="(item, stt) in data">
+                      <td>{{ stt+1 }}</td>
+                      <td>{{ item.name }}</td>
+                      <td>{{ item.key }}</td>
+                      <td>{{ item.level }}</td>
+                      <td>{{ item.created_at }}</td>
+                      <td></td>
+                  </tr>
+              </tbody>
               </table>
             </div>
             <!-- /.box-body -->

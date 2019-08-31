@@ -27,8 +27,15 @@
                     <div class="form-group">
                         <label for="">Chức vụ:</label>
                         <select class="form-control" v-model="data.position_id">
-                            <option disabled="" value="null">-- Chọn chức vụ --</option>
+                            <option disabled="" value="0">-- Chọn chức vụ --</option>
                             <option v-for="item in component.positions" :value="item.id">{{ item.name }}</option>
+                        </select>
+                    </div>
+                    <div class="form-group" v-if="parseInt(data.position_id) > 0">
+                        <label for="">Quản lý:</label>
+                        <select class="form-control" v-model="data.master_id">
+                            <option disabled="" value="0">-- Chọn người quản lý --</option>
+                            <option v-for="item in component.master_users" :value="item.id">{{ item.fullname }} - {{ item.position.name }}</option>
                         </select>
                     </div>
 	            </div>
@@ -52,14 +59,23 @@ export default {
             fullname: null, 
             email: null, 
             password: null,
-            position_id: null	
+            position_id: 0,
+            master_id: 0,	
         },
         component: {
-            positions: []
+            positions: [],
+            master_users: []
         }
     }),
     created() {
         this.getData();
+    },
+    watch: {
+        'data.position_id': async function(value) {
+            if(parseInt(value) > 0) {
+                this.component.master_users = await UserRepository.master(value);
+            }
+        }
     },
     methods: {
         getData() {

@@ -37,7 +37,8 @@ class User extends Model {
             'usp_permission_id'
         );
     }
-   public function children()
+    
+    public function children()
     {
         return $this->hasManyThrough(
             'App\Models\User',
@@ -46,6 +47,15 @@ class User extends Model {
             'use_id',
             'use_id',
             'usc_child_id'
+        );
+    }
+
+    public function master()
+    {
+        return $this->belongsTo(
+            'App\Models\UserChild', 
+            'use_id', 
+            'usc_child_id',
         );
     }
 }

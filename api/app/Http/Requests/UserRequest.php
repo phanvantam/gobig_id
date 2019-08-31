@@ -61,6 +61,7 @@ class UserRequest extends MainRequest
         $rules = $result['rules'];
         
         unset($rules['password']);
+        unset($rules['email']);
         if(!empty($data['password'])) {
             $rules['password'] = $result['rules']['password'];
         }
@@ -124,34 +125,6 @@ class UserRequest extends MainRequest
             'password_confirm.same'=> 'Mật khẩu xác nhận không khớp với mật khẩu mới',
             'password.regex'=> 'Mật khẩu mới không hợp lệ',   
             'db_password_code.same'=> 'Mật khẩu cũ không chính xác',   
-        ];
-        
-        return [
-            'authorize'=> true,
-            'rules'=> $rules,
-            'messages'=> $messages,
-            'data'=> $data
-        ];
-    }
-
-    public function _childCreate()
-    {
-        $data = [
-            'child_id' => Request::json('child_id'),
-            'child_id_v2' => Request::json('child_id'),
-            'parent_id' => Request::json('parent_id'),
-        ];
-        $rules = [
-            'child_id'=> 'exists:'. with(new \App\Models\User)->getTable() .',use_id',
-            // 'child_id_v2'=> Rule::exists(with(new \App\Models\UserChild)->getTable() , 'usc_child_id')                     
-            //     ->where(function ($query) use ($data) {  
-            //         $query->where('usc_parent_id', $data['parent_id']);                  
-            //     }),
-            'parent_id' => 'exists:'. with(new \App\Models\User)->getTable() .',use_id',
-        ];
-        $messages = [
-            'child_id.exists'=> 'Vui lòng chọn nhân viên',
-            'parent_id.exists'=> 'Vui lòng chỉ định cấp cha',
         ];
         
         return [

@@ -9,13 +9,13 @@ export default {
 		const MODULES = ConfigPermission.modules;
 		const PERMISSION = Store.getters.getData('user/permission', []);
 		const ADMIN = Store.getters.getData('user/is_admin', false);
-		if(ADMIN) {
+		if(ADMIN || this.positionCheck('IT')) {
 			return true;
 		}
 		var module_access = [];
 		PERMISSION.map(item=> {
 			if(item.project.code === PROJECT) {
-				module_access = item.modules.code;
+				module_access = 'code' in item.modules ? item.modules.code : [];
 			}
 		})
 		var result = [];
@@ -32,6 +32,14 @@ export default {
 		} else {
 			return ACCESS;
 		}
+	},
+	positionCheck(label) {
+		const POSITIONS = ConfigPermission.positions;
+		const POSITION = Store.getters.getData('user/position');
+		if((POSITION.key !== null && label in POSITIONS) && POSITIONS[label] === POSITION.key) {
+			return true;
+		}
+		return false;
 	},
 	saveAccessToken(value, exp=1) {
 		HelperIndex.setCookie('ACCESS_TOKEN', value, exp);

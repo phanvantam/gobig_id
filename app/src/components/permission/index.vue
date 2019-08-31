@@ -18,7 +18,7 @@
                     <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
                   </div>
                 </div>
-                <button type="button" class="btn btn-info btn-sm pull-right" data-toggle="modal" data-target="#permission-add">Thêm mới</button>
+                <button v-if="$helper.user.permission('permission.add|permission.manager')" type="button" class="btn btn-info btn-sm pull-right" data-toggle="modal" data-target="#permission-add">Thêm mới</button>
             </div>
             <!-- /.box-header -->
             <div class="box-body table-responsive">
@@ -39,7 +39,7 @@
                         <td>{{ item.project.name }}</td>
                         <td>{{ item.created_at }}</td>
                         <td>
-                          <span class="label label-primary" data-toggle="modal" data-target="#permission-edit" @click="component.permission_edit.id = item.id">
+                          <span v-if="$helper.user.permission('permission.edit|permission.manager')" class="label label-primary" data-toggle="modal" data-target="#permission-edit" @click="component.permission_edit.id = item.id">
                             <i class="fa fa-edit"></i> Sửa
                           </span>
                         </td>
@@ -54,9 +54,11 @@
     </section>
     <!-- /.content -->
     <permissionAdd 
+      v-if="$helper.user.permission('permission.add|permission.manager')"
       @reload="getData"
     />
     <permissionEdit 
+      v-if="$helper.user.permission('permission.edit|permission.manager')"
       @reload="getData"
       :id.sync="component.permission_edit.id"
     />

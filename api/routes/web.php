@@ -20,10 +20,11 @@ $router->group(['prefix' => 'v1'], function () use ($router) {
         $router->get('detail/{user_id:\d*}', 'UserController@detail');
         $router->get('info', 'UserController@info');
         $router->get('search', 'UserController@search');
-        $router->get('child/{user_id:\d*}', 'UserController@child');
         $router->post('create', 'UserController@create');
+        $router->get('child/{user_id:\d*}', 'UserController@child');
+        $router->delete('child/remove/{user_child_id:\d*}', 'UserController@childRemove');
         $router->put('update/{user_id:\d*}', 'UserController@update');
-        $router->post('child/create', 'UserController@childCreate');
+        $router->get('master', 'UserController@master');
         
         $router->group(['prefix' => 'permission'], function () use ($router) {
             $router->post('create', 'UserController@permissionCreate');

@@ -97,8 +97,8 @@ class PermissionRepository implements PermissionRepositoryInterface
 
 	public function getListModule($project_id)
 	{
-		$result = Module::where('mod_project_id', $project_id)->get();
-        return $result;
+		$result = Module::where('mod_parent_id', 0)->where('mod_project_id', $project_id)->with('children')->get();
+      return $result;
 	}
 
 	public function makeUniqueCode()

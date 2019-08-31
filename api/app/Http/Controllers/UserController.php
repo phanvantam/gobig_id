@@ -51,9 +51,11 @@ class UserController extends Controller
             'position_id'=> $this->request->json('position_id'),
             'code'=> $this->user->makeUniqueCode(),
             'salt'=> $this->user->makeSaltCode(),
+            'master_id'=> $this->request->json('master_id'),
         ];
         $request['password_code'] = $this->user->makePasswordCode($request['password'], $request['salt']);
         $record_id = $this->user->create($request);
+        $this->user->childCreate(['parent_id'=> $request['master_id'], 'child_id'=> $record_id]);
         return $this->response($record_id);
     }
 
@@ -64,23 +66,25 @@ class UserController extends Controller
             'email'=> $this->request->json('email'),
             'password'=> $this->request->json('password'),
             'position_id'=> $this->request->json('position_id'),
+            'master_id'=> $this->request->json('master_id'),
             'salt'=> $this->user->makeSaltCode(),
         ];
         if(!empty($request['password'])) {
             $request['password_code'] = $this->user->makePasswordCode($request['password'], $request['salt']);
         }
         $this->user->updateById($user_id, $request);
+        $this->user->removeChildByChildId($user_id);
+        $this->user->childCreate(['parent_id'=> $request['master_id'], 'child_id'=> $user_id]);
         return $this->response();
     }
 
-    public function childCreate()
+    public function master()
     {
         $request = [
-            'parent_id'=> $this->request->json('parent_id'),
-            'child_id'=> $this->request->json('child_id'),
+            'position_id'=> $this->request->query('position_id'),
         ];
-        $record_id = $this->user->childCreate($request);
-        return $this->response($record_id);
+        $result = $this->user->master($request['position_id']);
+        return $this->response($result);
     }
 
     public function permissionCreate()
@@ -147,6 +151,7 @@ class UserController extends Controller
     {
         $user = $this->user->getById($user_id);
         if($user !== null) {
+            $user->master;
             $user->position;
             $user->permission;
             $user->children;
@@ -178,6 +183,12 @@ class UserController extends Controller
         $result = $this->user->getChild($user_id);
         $response = $result === null ? [] : $result->toArray();
         return $this->response($response);
+    }
+
+    public function childRemove($id)
+    {
+        $this->user->childRemove($id);
+        return $this->response();
     }
 
     public function profileUpdate()

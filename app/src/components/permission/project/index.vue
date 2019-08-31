@@ -12,45 +12,33 @@
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header clearfix">
-                <div class="input-group input-group-sm pull-left" style="width: 150px;">
-                  <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
-                  <div class="input-group-btn">
-                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                  </div>
-                </div>
                 <button type="button" class="btn btn-info btn-sm pull-right" data-toggle="modal" data-target="#project-add">Thêm mới</button>
             </div>
             <!-- /.box-header -->
             <div class="box-body table-responsive">
               <table class="table table-hover">
                 <thead>
-                                    <tr>
-                                      <th>STT</th>
-                                      <th>Code</th>
-                                      <th>Tên</th>
-                                      <th>Ngày tạo</th>
-                                      <th>Tác vụ</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="table-product-body">
-                                    <tr v-for="item in data">
-                                        <td></td>
-                                        <td>{{ item.code }}</td>
-                                        <td>
-                                           <router-link 
-                                            :to="{ 
-                                              name: 'permissionModule',
-                                              params: {project_id: item.id}
-                                            }" 
-                                            class="link"
-                                            >
-                                            {{ item.name }}
-                                          </router-link>
-                                        </td>
-                                        <td>{{ item.created_at }}</td>
-                                        <td></td>
-                                    </tr>
-                                </tbody>
+                    <tr>
+                      <th>STT</th>
+                      <th>Code</th>
+                      <th>Tên</th>
+                      <th>Ngày tạo</th>
+                      <th>Tác vụ</th>
+                    </tr>
+                </thead>
+                <tbody class="table-product-body">
+                    <tr v-for="(item, stt) in data">
+                        <td>{{ stt+1 }}</td>
+                        <td>{{ item.code }}</td>
+                        <td>
+                           <router-link :to="{name: 'permissionModule', params: {project_id: item.id}}" class="link">
+                            {{ item.name }}
+                          </router-link>
+                        </td>
+                        <td>{{ item.created_at }}</td>
+                        <td></td>
+                    </tr>
+                </tbody>
               </table>
             </div>
             <!-- /.box-body -->
@@ -59,7 +47,7 @@
       </div>
     </section>
     <!-- /.content -->
-    <projectAdd />
+    <projectAdd @reload="getData" />
   </div>
 </template>
 
