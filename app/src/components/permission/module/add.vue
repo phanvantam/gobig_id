@@ -25,7 +25,7 @@
 	            </div>
 	            <!-- Modal footer -->
 	            <div class="modal-footer">
-	                <button type="button" class="btn btn-connect pull-left" @click="submit()">Xác nhận</button>
+	                <button type="button" class="btn btn-primary pull-left" @click="submit()">Xác nhận</button>
 	                <button type="button" class="btn btn-danger close-modal" data-dismiss="modal">Close</button>
 	            </div>
 	        </div>
@@ -40,7 +40,8 @@ export default {
     data: ()=> ({
         data: {
             name: null, 
-            parent_id: 0, 
+            parent_id: 0,
+            type: '',
         }
     }),
     props: {
@@ -58,6 +59,7 @@ export default {
                 switch(response.status) {
                     case 1: 
                         this.$emit('reload');
+                        $(this.$el).find('.close-modal').click();
                         this.$notify({
                             text: 'Thêm mới module thành công',
                             type: 'success'

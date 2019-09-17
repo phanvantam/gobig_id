@@ -86,7 +86,8 @@ export default {
         return Repository.post(`${resource}/module/create`, {
         	name: input.name, 
         	project_id: input.project_id, 
-        	parent_id: input.parent_id
+            parent_id: input.parent_id,
+        	type: input.type,
         });
     },
     addProject(input) {

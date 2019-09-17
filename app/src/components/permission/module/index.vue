@@ -62,6 +62,7 @@
     <moduleAdd 
       :project_id="project_id"
       :list_module="data"
+      @reload="getData"
     />
   </div>
 </template>

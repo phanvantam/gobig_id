@@ -25,7 +25,7 @@
                     <div class="row form-group">
                         <div class="col-xs-6" v-for="item in modules">
                             <label>{{ item.name }}</label>
-                            <span class="help-block" style="cursor: pointer;" v-for="item in item.child" @click="addModule(item.id)" >
+                            <span class="help-block" style="cursor: pointer;" v-for="item in item.children" @click="addModule(item.id)" >
                                 <i :class="{fa: true, 'fa-circle-o': !data.modules.includes(item.id), 'fa-dot-circle-o': data.modules.includes(item.id)}"></i>
                                 {{ item.name }}
                             </span>
@@ -34,7 +34,7 @@
 	            </div>
 	            <!-- Modal footer -->
 	            <div class="modal-footer">
-	                <button type="button" class="btn btn-connect pull-left" @click="submit()">Xác nhận</button>
+	                <button type="button" class="btn btn-primary pull-left" @click="submit()">Xác nhận</button>
 	                <button type="button" class="btn btn-danger close-modal" data-dismiss="modal">Close</button>
 	            </div>
 	        </div>

@@ -29,7 +29,7 @@
                     <div class="row form-group">
                         <div class="col-xs-6" v-for="item in modules">
                             <label>{{ item.name }}</label>
-                            <span class="help-block" v-for="item in item.child">
+                            <span class="help-block" v-for="item in item.children">
                                 <i :class="{fa: true, 'fa-circle-o': !data.modules.includes(`${item.id}`), 'fa-dot-circle-o': data.modules.includes(`${item.id}`)}"></i>
                                 {{ item.name }}
                             </span>
