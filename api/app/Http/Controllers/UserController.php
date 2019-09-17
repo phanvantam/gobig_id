@@ -36,6 +36,7 @@ class UserController extends Controller
             'paginate'=> [
                 'total_page' => ceil($result->total()/$result->perPage()),
                 'current_page' => $result->currentPage(),
+                'total_record' => $result->total(),
             ]
         ];
 

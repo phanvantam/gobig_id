@@ -17,7 +17,7 @@ class UserRepository implements UserRepositoryInterface
         if($params['fullname'] !== null) {
             $query = $query->where('use_fullname', 'LIKE', "%{$params['fullname']}%");
         }
-        $result = $query->paginate($params['per']);
+        $result = $query->with('position')->paginate($params['per']);
         return $result;
     }
 
