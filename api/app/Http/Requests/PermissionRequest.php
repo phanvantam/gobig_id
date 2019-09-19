@@ -53,10 +53,12 @@ class PermissionRequest extends MainRequest
         $data = [
             'name' => Request::json('name'),
             'key' => Request::json('key'),
+            'level' => Request::json('level'),
         ];
         $rules = [
             'name'=> 'required',
             'key'=> 'required',
+            'level'=> 'required',
         ];
         $messages = [];
         

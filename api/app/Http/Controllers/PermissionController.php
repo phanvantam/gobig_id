@@ -107,6 +107,7 @@ class PermissionController extends Controller
         $request = [
             'name'=> $this->request->json('name'),
             'key'=> $this->request->json('key'),
+            'level'=> $this->request->json('level'),
         ];
         $record_id = $this->permission->positionCreate($request);
         return $this->response($record_id);
@@ -114,10 +115,7 @@ class PermissionController extends Controller
 
     public function position()
     {
-        $request = [
-            // 'name'=> $this->request->json('name'),
-            // 'key'=> $this->request->json('key'),
-        ];
+        $request = [];
         $result = $this->permission->positionGetByFilter($request);
         return $this->response($result);
     }

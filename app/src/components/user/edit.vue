@@ -25,17 +25,11 @@
                         <input type="password" v-model="data.password" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label for="">Chức vụ:</label>
-                        <select class="form-control" v-model="data.position_id">
-                            <option disabled="" value="0">-- Chọn chức vụ --</option>
-                            <option v-for="item in component.positions" :value="item.id">{{ item.name }}</option>
-                        </select>
-                    </div>
-                    <div class="form-group" v-if="parseInt(data.position_id) > 0">
                         <label for="">Quản lý:</label>
+                        <input type="text" placeholder="Nhập tên hoặc email để tìm kiếm" @keyup.enter="getData" v-model="component.search_master" class="form-control">
                         <select class="form-control" v-model="data.master_id">
-                            <option disabled="" value="0">-- Chọn người quản lý --</option>
-                            <option v-for="item in component.master_users" :value="item.id">{{ item.fullname }} - {{ item.position.name }}</option>
+                            <option value="0">-- Chọn người quản lý --</option>
+                            <option v-for="item in component.master_users" :value="item.id">{{ item.fullname }} - {{ item.email }}</option>
                         </select>
                     </div>
 	            </div>
@@ -59,12 +53,11 @@ export default {
             fullname: null, 
             email: null, 
             password: null,
-            position_id: 0,
             master_id: 0,
         },
         component: {
-            positions: [],
-            master_users: []
+            master_users: [],
+            search_master: null
         }
     }),
     props: {
@@ -79,21 +72,17 @@ export default {
                 this.data.fullname = result.fullname;
                 this.data.email = result.email;
                 this.data.position_id = result.position.id;
-                this.data.master_id = this.$helper.arrayGet(result.master, 'usc_parent_id', 0);
+                this.data.master_id = result.master.id;
+                if(parseInt(this.data.master_id) > 0) {
+                    this.component.master_users = [result.master];
+                }
             }
         },
-        'data.position_id': async function(value) {
-            if(parseInt(value) > 0) {
-                this.component.master_users = await UserRepository.master(value);
-            }
-        }
-    },
-    created() {
-        this.getData();
     },
     methods: {
         async getData() {
-            this.component.positions = await PermissionRepository.positionSearch();
+            this.component.master_users = await UserRepository.search({query: this.component.search_master});
+            this.data.master_id = 0;
         },
         submit() {
         	UserRepository.edit(this.user_id, this.data)

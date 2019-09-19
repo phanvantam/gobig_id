@@ -1,5 +1,5 @@
 export default {
-	project: '5d01f40d18d2b',
+	project: '5d6919b568cd9',
 	modules: {	
 		user: {
 			add: '5d6919dc23c2d',
@@ -10,15 +10,9 @@ export default {
 			remove_child: '5d6919e65dec0',
 			update_permission: '5d6919ec5fa7c',
 		},
-		permission: {
-			index: '5d6a319c11ea3',
-			drop: '5d691a2fa6216',
-			manager: '5d691a1d0d948',
-			add: '5d691a247f1b6',
-			edit: '5d691a2982f4f'
-		},
-	},
-	positions: {
-		IT: 'IT'
+		especially: {
+			it: '5d8258138456a',
+			admin: '5d8257d0060f7',
+		}
 	}
 }

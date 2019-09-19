@@ -32,7 +32,7 @@
                                     <p>
                                         {{ user_info.fullname }}
                                         <small>Email: {{ user_info.email }}</small>
-                                        <small>Chức vụ: {{ user_position.name }}</small>
+                                        <small>Quyền: {{ user_permission.title }}</small>
                                     </p>
                                 </li>
                                 <!-- Menu Footer-->
@@ -60,7 +60,7 @@
                         <img src="/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
                     </div>
                     <div class="pull-left info">
-                        <p>{{ $helper.arrayGet(user_info, 'fullname') }}</p>
+                        <p>{{ user_info.fullname }}</p>
                         <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                     </div>
                 </div>
@@ -79,21 +79,18 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="treeview" v-if="$helper.user.permission('permission.index|permission.manager') || $helper.user.positionCheck('IT')">
+                    <li class="treeview" v-if="$helper.user.permission('especially.it')">
                         <a href="#">
                             <i class="fa fa-dashboard"></i>
                             <span>Phân quyền</span>
                             <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                         </a>
                         <ul class="treeview-menu">
-                            <li v-if="$helper.user.permission('permission.index|permission.manager')">
+                            <li>
                                 <router-link :to="{name:'permission'}"><i class="fa fa-circle-o"></i>Danh sách quyền</router-link>
                             </li>
-                            <li v-if="$helper.user.positionCheck('IT')">
+                            <li>
                                 <router-link :to="{name:'permissionProject'}"><i class="fa fa-circle-o"></i>Dự án</router-link>
-                            </li>
-                            <li v-if="$helper.user.positionCheck('IT')">
-                                <router-link :to="{name:'permissionPosition'}"><i class="fa fa-circle-o"></i>Chức vụ</router-link>
                             </li>
                         </ul>
                     </li>
@@ -104,13 +101,13 @@
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <router-view/>
-         <!--    <div class="wp-loading" v-show="loading">
+            <div class="wp-loading" v-show="loading">
                 <div class="spinner">
                   <div class="dot1"></div>
                   <div class="dot2"></div>
                 </div>
             </div>
- -->        </div>
+        </div>
         <!-- /.content-wrapper -->
         <footer class="main-footer">
             <div class="pull-right hidden-xs">
@@ -126,14 +123,14 @@
 
 export default {
     computed: {
-        // loading() {
-        //     return this.$store.getters.getData('loading', false);
-        // },
-        user_info() {
-            return this.$store.getters.getData('user/info', {});
+        loading() {
+            return this.$store.getters.getData('loading', false);
         },
-        user_position() {
-            return this.$store.getters.getData('user/position', {});
+        user_info() {
+            return this.$store.getters.getData('user/info');
+        },
+        user_permission() {
+            return this.$store.getters.getData('user/permission');
         },
     },
     methods: {

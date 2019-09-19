@@ -22,7 +22,6 @@
                     <th>STT</th>
                     <th>Họ và tên</th>
                     <th>Email</th>
-                    <th>Chức vụ</th>
                     <th>Ngày tạo</th>
                     <th>Tác vụ</th>
                   </tr>
@@ -32,7 +31,6 @@
                     <td>{{ stt+1 }}</td>
                     <td>{{ item.fullname }}</td>
                     <td>{{ item.email }}</td>
-                    <td>{{ item.position.name }}</td>
                     <td>{{ item.created_at }}</td>
                     <td>
                       <span class="label label-primary" data-toggle="modal" data-target="#user-children" @click="component.user_children.user_id = item.id">

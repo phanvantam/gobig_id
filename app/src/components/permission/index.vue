@@ -12,7 +12,7 @@
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header clearfix">
-                <button v-if="$helper.user.permission('permission.add|permission.manager')" type="button" class="btn btn-info btn-sm pull-right" data-toggle="modal" data-target="#permission-add">Thêm mới</button>
+                <button  type="button" class="btn btn-info btn-sm pull-right" data-toggle="modal" data-target="#permission-add">Thêm mới</button>
             </div>
             <!-- /.box-header -->
             <div class="box-body table-responsive">
@@ -27,13 +27,13 @@
                     </tr>
                 </thead>
                 <tbody class="table-product-body">
-                    <tr v-for="item in data">
-                        <td></td>
+                    <tr v-for="(item, stt) in data">
+                        <td>{{ stt+1 }}</td>
                         <td>{{ item.title }}</td>
                         <td>{{ item.project.name }}</td>
                         <td>{{ item.created_at }}</td>
                         <td>
-                          <span v-if="$helper.user.permission('permission.edit|permission.manager')" class="label label-primary" data-toggle="modal" data-target="#permission-edit" @click="component.permission_edit.id = item.id">
+                          <span class="label label-primary" data-toggle="modal" data-target="#permission-edit" @click="component.permission_edit.id = item.id">
                             <i class="fa fa-edit"></i> Sửa
                           </span>
                         </td>
@@ -48,11 +48,9 @@
     </section>
     <!-- /.content -->
     <permissionAdd 
-      v-if="$helper.user.permission('permission.add|permission.manager')"
       @reload="getData"
     />
     <permissionEdit 
-      v-if="$helper.user.permission('permission.edit|permission.manager')"
       @reload="getData"
       :id.sync="component.permission_edit.id"
     />

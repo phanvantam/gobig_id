@@ -16,7 +16,6 @@ class UserRequest extends MainRequest
             'fullname' => Request::json('fullname'),
             'email' => Request::json('email'),
             'password' => Request::json('password'),
-            'position_id' => Request::json('position_id'),
         ];
         $rules = [
             'fullname'=> 'required',
@@ -29,10 +28,6 @@ class UserRequest extends MainRequest
                 'required',
                 //Tối thiểu tám ký tự, ít nhất một chữ cái và một số:
                 'regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/'
-            ],
-            'position_id' => [
-                'required',
-                'exists:'. with(new \App\Models\Position)->getTable() .',pos_id'
             ]
         ];
         $messages = [
@@ -43,6 +38,28 @@ class UserRequest extends MainRequest
             'password.required'=> 'Vui lòng nhập mật khẩu',
             'password.regex'=> 'Mật khẩu không hợp lệ',
             'position_id.exists'=> 'Vui lòng chọn chức vụ'
+        ];
+        
+        return [
+            'authorize'=> true,
+            'rules'=> $rules,
+            'messages'=> $messages,
+            'data'=> $data
+        ];
+    }
+
+    public function _info()
+    {
+        $data = [
+            'code' => USER_CODE,
+        ];
+        $rules = [
+            'code' => [
+                'exists:'. with(new \App\Models\User)->getTable() .',use_code'
+            ]
+        ];
+        $messages = [
+            'code.exists'=> 'Không tìm thấy code người dùng',
         ];
         
         return [

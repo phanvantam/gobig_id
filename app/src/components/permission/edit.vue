@@ -44,6 +44,7 @@
 
 <script>
 import PermissionRepository from '@/repositories/PermissionRepository'
+import Parser from '@/parser/index';
 
 export default {
     data: ()=> ({
@@ -130,6 +131,10 @@ export default {
             .then(response=> {
                 this.data.project_id = response.project.id;
                 this.data.name = response.title;
+                response.modules = Parser.run({
+                    module: 'Module',
+                    data: response.modules, 
+                });
                 response.modules.map(item=> {
                     this.data.modules.push(parseInt(item.id));
                 })

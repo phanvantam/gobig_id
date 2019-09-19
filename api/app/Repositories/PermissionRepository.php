@@ -60,6 +60,7 @@ class PermissionRepository implements PermissionRepositoryInterface
 		$data = [
          'pos_name'=> $input['name'],
          'pos_key'=> $input['key'],
+         'pos_level'=> (int)$input['level'],
       ];
       $record_id = Position::insertGetId($data);
       return $record_id;

@@ -19,23 +19,24 @@
                                 <th>Họ và tên</th>
                                 <th>Email</th>
                                 <th>Ngày tạo</th>
-                                <th v-if="$helper.user.permission('user.remove_child|user.manager')">Tác vụ</th>
                               </tr>
                             </thead>
                             <tbody class="table-product-body">
-                              <tr v-for="item in users_child">
-                                <td></td>
+                              <tr v-for="(item, stt) in users_child">
+                                <td>{{ stt+1 }}</td>
                                 <td>{{ item.fullname }}</td>
                                 <td>{{ item.email }}</td>
                                 <td>{{ item.created_at }}</td>
-                                <td v-if="$helper.user.permission('user.remove_child|user.manager')">
-                                  <span class="label label-danger" @click="remove(item.child_id)">
-                                    <i class="fa fa-trash"></i> Xoá
-                                  </span>
-                                </td>
                               </tr>
                             </tbody>
                           </table>
+                    </div>
+                    <div>
+                         <paginate 
+                        :page_total="component.paginate.page_total"
+                        :page_current.sync="component.paginate.page_current"
+                        :total_record="component.paginate.total_record"
+                        />
                     </div>
                 </div>
                 <!-- Modal footer -->
@@ -53,21 +54,49 @@ import UserRepository from '@/repositories/UserRepository';
 export default {
     data: ()=> ({
         users_child: [],
+        component: {
+            paginate: {
+            page_total: 0,
+            page_current: 0,
+            total_record: 0
+          }
+        },
+        params: {
+      page: 1,
+      per: 1
+    }
     }),
     props: {
         user_id: {
             type: Number
         }
     },
+    components: {
+        paginate: ()=> import('@/components/templates/paginate.vue')
+    },
     watch: {
-        user_id: 'getData'
+        user_id: function() {
+            this.params.page = 1;
+            this.getData();
+        },
+        'component.paginate.page_current': function(value) {
+            if(value !== this.params.page) {
+                this.params.page = value;
+                this.getData();
+            }
+        },
     },
     methods: {
-        getData() {
-            UserRepository.getChild(this.user_id)
-            .then(response=> {
-                this.users_child = response;
-            })
+        async getData() {
+            const response = await UserRepository.getChild(this.user_id, {
+        page: this.params.page,
+        page_per: this.params.per,
+      });
+
+            this.users_child = response.users;
+            this.component.paginate.page_total = response.paginate.total;
+            this.component.paginate.page_current = response.paginate.current;
+            this.component.paginate.total_record = response.paginate.total_record;
         },
         async remove(id) {
             if(confirm('Xác nhận xoá nội dung này')) {

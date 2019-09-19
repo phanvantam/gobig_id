@@ -8,6 +8,6 @@ export default [
 	{key: 'updated_at',key_api: 'use_updated_at',data_type: 'string'},
 	{key: 'permission',key_api: 'permission',data_type: 'array',parser: 'Permission'},
 	{key: 'position',key_api: 'position',data_type: 'object',parser: 'Position'},
-	{key: 'master',key_api: 'master',data_type: 'object'},
+	{key: 'master',key_api: 'master',data_type: 'object', parser: 'User'},
 	{key: 'children',key_api: 'children',data_type: 'array',parser: 'User'},
 ];

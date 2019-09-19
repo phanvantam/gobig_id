@@ -16,15 +16,6 @@ class User extends Model {
         'use_created_at' => 'datetime:H:i d/m/Y',
         'use_updated_at' => 'datetime:H:i d/m/Y',
     ];
-    
-	public function position()
-	{
-		return $this->belongsTo(
-			'App\Models\Position', 
-			'use_position_id',
-			'pos_id', 
-		);
-	}
 
 	public function permission()
     {
@@ -37,25 +28,13 @@ class User extends Model {
             'usp_permission_id'
         );
     }
-    
-    public function children()
-    {
-        return $this->hasManyThrough(
-            'App\Models\User',
-            'App\Models\UserChild',
-            'usc_parent_id', 
-            'use_id',
-            'use_id',
-            'usc_child_id'
-        );
-    }
 
     public function master()
     {
         return $this->belongsTo(
-            'App\Models\UserChild', 
+            'App\Models\User', 
+            'use_master_id',
             'use_id', 
-            'usc_child_id',
         );
     }
 }

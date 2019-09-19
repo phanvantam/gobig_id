@@ -49,14 +49,21 @@ class UserController extends Controller
             'fullname'=> $this->request->json('fullname'),
             'email'=> $this->request->json('email'),
             'password'=> $this->request->json('password'),
-            'position_id'=> $this->request->json('position_id'),
             'code'=> $this->user->makeUniqueCode(),
             'salt'=> $this->user->makeSaltCode(),
             'master_id'=> $this->request->json('master_id'),
         ];
         $request['password_code'] = $this->user->makePasswordCode($request['password'], $request['salt']);
         $record_id = $this->user->create($request);
-        $this->user->childCreate(['parent_id'=> $request['master_id'], 'child_id'=> $record_id]);
+
+        if($request['master_id'] !== 0) {
+            $result = $this->user->getById($request['master_id']);
+            $location = explode('.', $result->use_location);
+            $location[] = $record_id;
+        } else {
+            $location = [$record_id];
+        }
+        $this->user->updateLocationById($record_id, $location);
         return $this->response($record_id);
     }
 
@@ -66,7 +73,6 @@ class UserController extends Controller
             'fullname'=> $this->request->json('fullname'),
             'email'=> $this->request->json('email'),
             'password'=> $this->request->json('password'),
-            'position_id'=> $this->request->json('position_id'),
             'master_id'=> $this->request->json('master_id'),
             'salt'=> $this->user->makeSaltCode(),
         ];
@@ -74,18 +80,22 @@ class UserController extends Controller
             $request['password_code'] = $this->user->makePasswordCode($request['password'], $request['salt']);
         }
         $this->user->updateById($user_id, $request);
-        $this->user->removeChildByChildId($user_id);
-        $this->user->childCreate(['parent_id'=> $request['master_id'], 'child_id'=> $user_id]);
-        return $this->response();
-    }
 
-    public function master()
-    {
-        $request = [
-            'position_id'=> $this->request->query('position_id'),
-        ];
-        $result = $this->user->master($request['position_id']);
-        return $this->response($result);
+        $user_detail = $this->user->getById($user_id);
+        $result = $this->user->getByLocation($user_detail->use_location, ['use_location', 'use_id']);
+        if($result !== null) {
+            $location_new = $user_id;
+            if((int)$request['master_id'] !== 0) {
+                $master_detail = $this->user->getById($request['master_id']);
+                $location_new = "{$master_detail->use_location}.{$user_id}";
+            }
+            foreach ($result as $item) {
+                $location = preg_replace("/^".$user_detail->use_location."\./", $location_new. '.', $item->use_location);
+                $this->user->updateLocationById($item->use_id, explode('.', $location));
+            }
+            $this->user->updateLocationById($user_id, explode('.', $location_new));
+        }
+        return $this->response();
     }
 
     public function permissionCreate()
@@ -123,28 +133,34 @@ class UserController extends Controller
     public function info()
     {
         $user = $this->user->getByCode(USER_CODE);
-
-        $user->position;
+        
+        $user->master;
         $user->permission;
-        $user->children;
-        $user->permission->map(function($item) {
-            $item->project;
-            $result = $this->permission->getModuleCode($item->per_modules_id);
-            $modules = [
-                'code'=> [],
-                'list'=> []
-            ];
-            if($result !== null) {
-                foreach($result as $m_item) {
-                    $modules['list'][] = [
-                        'name'=> $m_item->mod_name,
-                        'code'=> $m_item->mod_code
-                    ];
-                    $modules['code'][] = $m_item->mod_code;
+        if($user->permission !== null) {
+            $user->permission->map(function($item) {
+                $item->project;
+                $result = $this->permission->getModuleCode($item->per_modules_id);
+                $modules = [
+                    'code'=> [],
+                    'list'=> []
+                ];
+                if($result !== null) {
+                    foreach($result as $m_item) {
+                        $modules['list'][] = [
+                            'name'=> $m_item->mod_name,
+                            'code'=> $m_item->mod_code
+                        ];
+                        $modules['code'][] = $m_item->mod_code;
+                    }
                 }
-            }
-            $item->modules = $modules;
-        });
+                $item->modules = $modules;
+            });
+        }
+        $user_children = $this->user->getByLocation($user->use_location, ['use_code']);
+        if($user_children !== null) {
+            $user->children_code = $user_children->implode('use_code', '|');
+        }
+        
         return $this->response($user);
     }
 
@@ -153,9 +169,7 @@ class UserController extends Controller
         $user = $this->user->getById($user_id);
         if($user !== null) {
             $user->master;
-            $user->position;
             $user->permission;
-            $user->children;
             $user->permission->map(function($item) {
                 $item->project;
                 $result = $this->permission->getModuleCode($item->per_modules_id);
@@ -181,8 +195,21 @@ class UserController extends Controller
 
     public function child($user_id)
     {
-        $result = $this->user->getChild($user_id);
-        $response = $result === null ? [] : $result->toArray();
+        $user = $this->user->getById($user_id);
+        $request = [
+            'fullname'=> $this->request->input('fullname'),
+            'per'=> $this->request->input('per', 10),
+            'location'=> $user->use_location
+        ];
+        $result = $this->user->children($request);
+        $response = [
+            'users'=> $result->all(),
+            'paginate'=> [
+                'total_page' => ceil($result->total()/$result->perPage()),
+                'current_page' => $result->currentPage(),
+                'total_record' => $result->total(),
+            ]
+        ];
         return $this->response($response);
     }
 

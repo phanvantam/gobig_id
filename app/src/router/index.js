@@ -4,6 +4,7 @@ import HelperUser from '@/helper/user';
 import HelperIndex from '@/helper/index';
 import Store from '@/store/index';
 import UserRepository from '@/repositories/UserRepository';
+import ConfigPermission from '@/config/permission.js';
 
 Vue.use(Router);
 
@@ -30,13 +31,16 @@ const ROUTER = new Router({
         {
             path: '/phan-quyen/module/:project_id',
             name: 'permissionModule',
+            meta: {
+                module: 'especially.it'
+            },
             component: () => import('@/components/permission/module/index')
         },
         {
             path: '/phan-quyen',
             name: 'permission',
             meta: {
-                module: 'permission.manager|permission.index'
+                module: 'especially.it'
             },
             component: () => import('@/components/permission/index')
         },
@@ -44,17 +48,9 @@ const ROUTER = new Router({
             path: '/phan-quyen/du-an',
             name: 'permissionProject',
             meta: {
-                position: 'IT'
+                module: 'especially.it'
             },
             component: () => import('@/components/permission/project/index')
-        },
-        {
-            path: '/phan-quyen/chuc-vu',
-            name: 'permissionPosition',
-            meta: {
-                position: 'IT'
-            },
-            component: () => import('@/components/permission/position/index')
         },
         {
             path: '/dang-nhap',
@@ -78,44 +74,44 @@ const ROUTER = new Router({
 });
 
 ROUTER.beforeEach((to, from, next) => {
+    const AUTH = HelperIndex.arrayGet(to, 'meta.auth', true);
+
     UserRepository.getInfo()
     .then(response=> {
-        if(to.name === 'login') {
+        if(AUTH === false) {
             next(from);
         } else {
-            Store.dispatch('setData', {key: 'user/login', value: true});
-            Store.dispatch('setData', {key: 'user/info', value: {
-                email: response.email,
-                id: response.id,
-                fullname: response.fullname,
-            }});
-            Store.dispatch('setData', {key: 'user/permission', value: response.permission});
-            Store.dispatch('setData', {key: 'user/position', value: response.position});
-            Store.dispatch('setData', {key: 'user/is_admin', value: response.position.key === 'ADMIN'});
-            const MODULE_LABEL = HelperIndex.arrayGet(to, 'meta.module');
-            const POSITION_LABEL = HelperIndex.arrayGet(to, 'meta.position');
-            if(MODULE_LABEL !== null) {
-                const ACCESS = HelperUser.permission(MODULE_LABEL);
-                if(ACCESS === false) {
-                    next({name: 'error_404'});
-                } else {
-                    next();
+            Store.dispatch('setData', {key: 'user/info', value: response});
+            let permission = null;
+            response.permission.map(item=> {
+                if(item.project.code === ConfigPermission.project) {
+                    permission = item;
                 }
-            } else if(POSITION_LABEL !== null) {
-                const value = HelperUser.positionCheck(POSITION_LABEL);
-                if(value === false) {
-                    next({name: 'error_404'});
-                } else {
-                    next();
+            })
+            if(permission !== null) {
+                Store.dispatch('setData', {key: 'user/permission', value: permission});
+                const module_label = HelperIndex.arrayGet(to, 'meta.module');
+                if(module_label !== null) {
+                    const access = HelperUser.permission(module_label);
+                    if(access === false) {
+                        next({name: 'error_404'});
+                    } else {
+                        next();
+                    }
                 }
-            } else {
                 next();
+            } else {
+                Vue.notify({
+                    text: 'Tài khoản chưa được cấp quyền truy cập',
+                    type: 'error'
+                })
+                HelperUser.removeAccessToken();
+                next({name: 'login'});
             }
         }
     })
     .catch(e=> {
         if(e.response.status === 401) {
-            const AUTH = HelperIndex.arrayGet(to, 'meta.auth', true);
             if(AUTH) {
                 next({name: 'login'});
             } else {

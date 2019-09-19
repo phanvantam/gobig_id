@@ -79,6 +79,7 @@ export default {
     positionAdd(input) {
         return Repository.post(`${resource}/position/create`, {
             name: input.name, 
+            level: input.level, 
             key: input.key
         });
     },

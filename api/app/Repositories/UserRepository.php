@@ -5,7 +5,6 @@ namespace App\Repositories;
 use App\Repositories\UserRepositoryInterface;
 use App\Models\Position;
 use App\Models\User;
-use App\Models\UserChild;
 use App\Models\UserPermission;
 
 class UserRepository implements UserRepositoryInterface
@@ -17,7 +16,7 @@ class UserRepository implements UserRepositoryInterface
         if($params['fullname'] !== null) {
             $query = $query->where('use_fullname', 'LIKE', "%{$params['fullname']}%");
         }
-        $result = $query->with('position')->paginate($params['per']);
+        $result = $query->paginate($params['per']);
         return $result;
     }
 
@@ -27,8 +26,9 @@ class UserRepository implements UserRepositoryInterface
         if(!empty($params['query'])) {
             $query = $query->where('use_fullname', 'LIKE', "%{$params['query']}%");
             $query = $query->orWhere('use_email', 'LIKE', "%{$params['query']}%");
+            $query = $query->orWhere('use_code', 'LIKE', "%{$params['query']}%");
         }
-        $result = $query->skip(0)->take(5)->get();
+        $result = $query->skip(0)->take(10)->get();
         return $result;
     }
 
@@ -42,32 +42,6 @@ class UserRepository implements UserRepositoryInterface
     {
         $result = User::where('use_id', $value)->first();
         return $result;
-    }
-
-    public function getChild($value)
-    {
-        $result = UserChild::where('usc_parent_id', $value)->leftJoin('users', 'use_id', 'usc_child_id')->get();
-        return $result;
-    }
-
-    public function childRemove($value)
-    {
-        UserChild::where('usc_id', $value)->delete();
-    }
-
-    public function removeChildByChildId($value)
-    {
-        UserChild::where('usc_child_id', $value)->delete();
-    }
-
-    public function childCreate($input)
-    {
-        $data = [
-            'usc_parent_id'=> $input['parent_id'],
-            'usc_child_id'=> $input['child_id']
-        ];
-        $record_id = UserChild::insertGetId($data);
-        return $record_id;
     }
 
     public function makeUniqueCode()
@@ -93,8 +67,8 @@ class UserRepository implements UserRepositoryInterface
         $data = [
             'use_fullname'=> $input['fullname'],
             'use_email'=> $input['email'],
-            'use_position_id'=> $input['position_id'],
             'use_code'=> $input['code'],
+            'use_master_id'=> $input['master_id'],
             'use_password_code'=> $input['password_code'],
             'use_salt'=> $input['salt'],
         ];
@@ -102,31 +76,41 @@ class UserRepository implements UserRepositoryInterface
         return $record_id;
     }
 
-    public function master($position_id) {
-        $result = User::whereIn('use_position_id', function($query) use($position_id) {
-            $query->select('pos_id')
-            ->from(with(new Position)->getTable())
-            ->where('pos_level', '<', function($query) use($position_id) {
-                $query->select('pos_level')
-                ->from(with(new Position)->getTable())
-                ->where('pos_id', $position_id);
-            });
-        })->with('position')->get();
-        return $result;
-    }
-   
     public function updateById($id, $input)
     {
         $data = [
             'use_fullname'=> $input['fullname'],
             'use_email'=> $input['email'],
-            'use_position_id'=> $input['position_id'],
+            'use_master_id'=> $input['master_id'],
         ];
         if(!empty($input['password_code'])) {
             $data['use_password_code'] = $input['password_code'];
             $data['use_salt'] = $input['salt'];
         }
         User::where('use_id', $id)->update($data);
+    }
+
+    public function updateLocationById($id, $values)
+    {
+        $data = [
+            'use_location'=> implode('.', $values),
+        ];
+        User::where('use_id', $id)->update($data);
+    }
+
+    public function getByLocation($value, $fields=['*'])
+    {
+        return User::select($fields)->where('use_location','LIKE', "{$value}.%")->get();
+    }
+
+    public function children($params=[])
+    {
+        $query = User::where('use_location','LIKE', "{$params['location']}.%");
+        if($params['fullname'] !== null) {
+            $query = $query->where('use_fullname', 'LIKE', "%{$params['fullname']}%");
+        }
+        $result = $query->paginate($params['per']);
+        return $result;
     }
 
     public function updateProfileById($id, $input)

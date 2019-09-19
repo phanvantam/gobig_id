@@ -75,6 +75,12 @@ export default {
             if(value !== null) {
                this.getPermissionSelect();
             }
+        },
+        user_id: function() {
+            this.data.project_id = null;
+            this.data.permission_id = null;
+            this.data.modules = [];
+            this.modules = [];
         }
     },
     props: {

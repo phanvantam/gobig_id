@@ -43,15 +43,6 @@ export default {
         })
         return response;
     },
-    async master(position_id) {
-        const result = await Repository.get(`${resource}/master`, {
-            params: {position_id: position_id}
-        });
-        return Parser.run({
-            module: 'User',
-            data: HelperIndex.arrayGet(result, 'data', []), 
-        });
-    },
     permissionAdd(input) {
         return Repository.post(`${resource}/permission/create`, {
             permission_id: input.permission_id,
@@ -93,12 +84,24 @@ export default {
             master_id: input.master_id,
         });
     },
-    async getChild(user_id) {
-        const result = await Repository.get(`${resource}/child/${user_id}`);
-        const response = Parser.run({
-            module: 'User',
-            data: HelperIndex.arrayGet(result, 'data', []),
-        })
+    async getChild(user_id, input) {
+        const result = await Repository.get(`${resource}/child/${user_id}`, {
+            params: {
+                page: input.page,
+                per: input.page_per,
+            }
+        });
+        const response = {
+            users: Parser.run({
+                module: 'User',
+                data: HelperIndex.arrayGet(result, 'data.users', []), 
+            }),
+            paginate: Parser.run({
+                module: 'Paginate',
+                data: HelperIndex.arrayGet(result, 'data.paginate', {}), 
+                type: 'object'
+            })
+        };
         return response;
     },
     childRemove(id) {
@@ -109,7 +112,6 @@ export default {
             email: input.email, 
             password: input.password, 
             fullname: input.fullname,
-            position_id: input.position_id,
             master_id: input.master_id,
         });
     },

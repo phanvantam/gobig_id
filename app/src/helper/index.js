@@ -28,7 +28,7 @@ export default {
 		return value && typeof value === 'object' && value.constructor === Array;
 	},
 	isObject(value) {
-		return value && typeof value === 'object' && value.constructor === Object;
+		return value && value !== null && typeof value === 'object' && value.constructor === Object;
 	},
 	formatPrice(value, unit=' ₫') {
 		if(value === 0) {

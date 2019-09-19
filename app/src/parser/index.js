@@ -2,7 +2,7 @@ import HelperIndex from '@/helper/index';
 import Module_parser from './factory.js';
 
 export default {
-	run({data, type='array', module}) {
+	run({data, type='array', module}, $default=true) {
 		let parser = Module_parser.get(module);
 		let result = null;
 		switch(type) {
@@ -10,23 +10,25 @@ export default {
 				result = [];
 				data = HelperIndex.isArray(data) ? data : [];
 				data.map(item=> {
-					result.push(this.test(item, parser));
+					result.push(this.test(item, parser,$default));
 				});
 			break;
 			case 'object':
-				result = this.test(data, parser);
+				result = this.test(data, parser, $default);
 			break;
 		}
 		return result;
 	},
-	test(data, parser) {
+	test(data, parser, $default) {
 		data = HelperIndex.isObject(data) ? data : {};
 		let result = {};
 		for(let stt in parser) {
 			let item = parser[stt];
 			switch(item.data_type) {
 				case 'object': 
-					result[item.key] = this.run({data: {}, module: item.parser, type: 'object'});
+					if($default) {
+						result[item.key] = this.run({data: {}, module: item.parser, type: 'object'}, false);
+					}
 				break;
 				case 'array': 
 					result[item.key] = [];
