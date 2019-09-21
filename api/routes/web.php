@@ -25,6 +25,7 @@ $router->group(['prefix' => 'v1'], function () use ($router) {
         $router->delete('child/remove/{user_child_id:\d*}', 'UserController@childRemove');
         $router->put('update/{user_id:\d*}', 'UserController@update');
         $router->get('master', 'UserController@master');
+        $router->get('module', 'UserController@getByModule');
         
         $router->group(['prefix' => 'permission'], function () use ($router) {
             $router->post('create', 'UserController@permissionCreate');

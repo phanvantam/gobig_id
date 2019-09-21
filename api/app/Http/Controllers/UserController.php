@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Repositories\UserRepositoryInterface;
 use App\Repositories\PermissionRepositoryInterface;
 use App\Http\Requests\UserRequest;
+use App\Models\Permission;
 
 class UserController extends Controller
 {
@@ -227,6 +228,32 @@ class UserController extends Controller
         ];
         $this->user->updateProfileById($user->use_id, $request);
         return $this->response();
+    }
+
+    public function getByModule()
+    {
+        $request = [
+            'module_code'=> $this->request->input('module_code'),
+        ];
+        $module_detail = $this->permission->moduleByCode($request["module_code"]);
+        $permission = Permission::where('per_modules_id', 'LIKE', "{$module_detail->mod_id},%")->first();
+        if($permission === null) {
+            $permission = Permission::where('per_modules_id', 'LIKE', "%,{$module_detail->mod_id},%")->first();
+        }
+        if($permission === null) {
+            $permission = Permission::where('per_modules_id', 'LIKE', "%,{$module_detail->mod_id}")->first();
+        }
+        $users = [];
+        if($permission !== null) {
+            $result = $this->user->permissionById($permission->per_id);
+            if($result !== null) {
+                foreach($result as $item) {
+                    $users[] = $item->user;
+                }
+            }
+        }
+        
+        return $this->response($users);
     }
 
     public function profileUpdatePassword()

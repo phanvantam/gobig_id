@@ -15,4 +15,13 @@ class UserPermission extends Model {
 		'usp_created_at' => 'datetime:H:i d/m/Y',
   		'usp_updated_at' => 'datetime:H:i d/m/Y',
 	];
+
+	public function user()
+    {
+        return $this->belongsTo(
+            'App\Models\User',
+            'usp_user_id',
+            'use_id'
+        );
+    }
 }

@@ -147,6 +147,11 @@ class UserRepository implements UserRepositoryInterface
         UserPermission::where('usp_project_id', $project_id)->where('usp_user_id', $user_id)->delete();
     }
 
+    public function permissionById($value)
+    {
+        return UserPermission::where('usp_permission_id', $value)->with('user')->skip(0)->take(10)->get();
+    }
+
     public function permissionGetByProjectAndUser($project_id, $user_id)
     {
         return UserPermission::where('usp_project_id', $project_id)->where('usp_user_id', $user_id)->first();

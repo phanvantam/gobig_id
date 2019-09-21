@@ -129,4 +129,10 @@ class PermissionRepository implements PermissionRepositoryInterface
 		$result = Module::whereIn('mod_id', explode(',', $value))->get();
 		return $result;
 	}
+
+	public function moduleByCode($value)
+	{
+		$result = Module::where('mod_code', $value)->first();
+		return $result;
+	}
 }
