@@ -40,6 +40,9 @@ $router->group(['prefix' => 'v1'], function () use ($router) {
                 $router->put('password', 'UserController@profileUpdatePassword');
             });
         });
+
+        $router->get('get_list', 'UserController@getList');
+
     });
 
     $router->group(['prefix' => 'auth'], function () use ($router) {

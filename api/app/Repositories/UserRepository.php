@@ -20,6 +20,12 @@ class UserRepository implements UserRepositoryInterface
         return $result;
     }
 
+    public function getByListCode($value)
+    {
+        $result = User::whereIn('use_code', $value)->get();
+        return $result;
+    }
+
     public function search($params)
     {
         $query = new User;

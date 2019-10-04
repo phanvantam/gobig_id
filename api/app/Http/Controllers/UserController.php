@@ -44,6 +44,16 @@ class UserController extends Controller
         return $this->response($response);
     }
 
+    public function getList()
+    { 
+        $request = [
+            'code'=> explode('|', $this->request->input('code'))
+        ];
+        $result = $this->user->getByListCode($request['code']);
+        $response = $result->all();
+        return $this->response($response);
+    }
+
     public function create()
     {
         $request = [
