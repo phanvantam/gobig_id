@@ -102,7 +102,7 @@ export default {
     params: {
       name: null,
       page: 1,
-      per: 10
+      per: 20
     }
   }),
   components: {

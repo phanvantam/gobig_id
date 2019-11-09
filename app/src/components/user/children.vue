@@ -63,7 +63,7 @@ export default {
         },
         params: {
       page: 1,
-      per: 1
+      per: 10
     }
     }),
     props: {

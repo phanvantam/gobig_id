@@ -22,7 +22,7 @@
                             <option v-for="item in projects" :value="item.id">{{ item.name }}</option>
                         </select>
                     </div>
-                    <div class="row form-group">
+                    <div class="row form-group" v-if="reload">
                         <div class="col-xs-6" v-for="item in modules">
                             <label>{{ item.name }}</label>
                             <span class="help-block" style="cursor: pointer;" v-for="item in item.children" @click="addModule(item.id)" >
@@ -34,8 +34,8 @@
 	            </div>
 	            <!-- Modal footer -->
 	            <div class="modal-footer">
-	                <button type="button" class="btn btn-primary pull-left" @click="submit()">Xác nhận</button>
-	                <button type="button" class="btn btn-danger close-modal" data-dismiss="modal">Close</button>
+	                <button type="button" class="btn btn-danger close-modal pull-left" data-dismiss="modal">Close</button>
+	                <button type="button" class="btn btn-primary pull-right" @click="submit()">Xác nhận</button>
 	            </div>
 	        </div>
 	    </div>
@@ -48,6 +48,7 @@ import Parser from '@/parser/index';
 
 export default {
     data: ()=> ({
+        reload: true,
         data: {
             project_id: null, 
             name: null,
@@ -127,6 +128,8 @@ export default {
             }
         },
         getPermission() {
+            this.reload = false;
+            this.data.modules = [];
             PermissionRepository.getById(this.id)
             .then(response=> {
                 this.data.project_id = response.project.id;
@@ -138,6 +141,7 @@ export default {
                 response.modules.map(item=> {
                     this.data.modules.push(parseInt(item.id));
                 })
+                this.reload = true;
             })
         },
         sortModuleByParent(data) {

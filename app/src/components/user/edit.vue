@@ -35,8 +35,8 @@
 	            </div>
 	            <!-- Modal footer -->
 	            <div class="modal-footer">
-	                <button type="button" class="btn btn-connect pull-left" @click="submit()">Xác nhận</button>
-	                <button type="button" class="btn btn-danger close-modal" data-dismiss="modal">Close</button>
+	                <button type="button" class="btn btn-danger close-modal pull-left" data-dismiss="modal">Close</button>
+	                <button type="button" class="btn btn-primary pull-right" @click="submit()">Xác nhận</button>
 	            </div>
 	        </div>
 	    </div>
